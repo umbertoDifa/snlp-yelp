@@ -1,0 +1,155 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+%\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%
+\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+
+
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+%\usepackage{amsmath} % assumes amsmath package installed
+%\usepackage{amssymb}  % assumes amsmath package installed
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+
+%mypackages
+\usepackage{amsmath}
+ \usepackage[table,xcdraw]{xcolor}
+\usepackage[pdftex]{graphicx}
+\usepackage[english]{babel}
+\usepackage{geometry} 
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{movie15}
+
+\usepackage{fancyhdr} 
+\usepackage{listings}
+\definecolor{light-gray}{gray}{0.95}
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+
+\usepackage[hyperfootnotes=false]{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	colorlinks=false,
+	urlbordercolor=white,
+	citebordercolor=black,
+	linkbordercolor = red
+}
+\title{
+		%\vspace{-1in} 	
+		\usefont{OT1}{bch}{b}{n}
+		\normalfont \normalsize \textsc{University of Illinois At Chicago\\CS521 - Statistical Natural Language Processing} \\ [25pt]
+		\horrule{2pt} \\[0.4cm]
+		\huge Project Proposal \\
+		\horrule{2pt} \\[0.3cm]
+}
+\author{
+		\normalfont 								\large
+         MS.Umberto Di Fabrizio, MS.Vittorio Selo\\		\normalsize
+        \today \\[0.5cm]
+}
+\date{}
+
+\geometry{margin=1in}
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{PROBLEM}
+Nowadays with the growth of websites that offer user-generated content (e.g. Yelp, IMDb, TripAdvisor) there is an increasing need, for companies, to extract the tastes of the users in order to make unique the user experience.\\
+%For this reason, recently, there have been a lot of researches in this area aimed to increase the effectiveness of the contents provided to the user (e.g. Netflix competition\cite{netflix}, Amazon).
+%The traditional approach is a system that tries to predict the rating that a user would give to an item; this type of engines are called recommendation systems and have gained popularity in the recent years.\\
+Generally to achieve this outcome the system is trained using high-level features, for instance in a movie platform those features would be: the rating of the film, the genre, the actors and so on.\\
+%Those characteristics are easily obtained from the database and are extensively used.\\
+Our idea is to extract \textit{hidden-features} of an user in order to understand their personal tastes.
+% We call \textit{hidden-features} those personal tastes of an user which can even be unconscious for the user himself. 
+ For example suppose a user writes reviews of mexican restaurants, why is one restaurant better than another although the food is good in both? Usually, people pay attention to details such as lights, atmosphere, the type of customers and so on, and sometimes without even being aware of their pet peeves.\\
+The issue is \underline{how} to find out, in an automatic way, those tastes that rule people feelings about a place (or an item) and \underline{which} source to use.\\
+
+\section{SOLUTION}
+We plan to develop a framework to detect and extract people personal and intimate tastes.\\
+To extract the \textit{hidden-features} we will mine the reviews of an user in order to collect the most common topics (furniture, lights, etc.) and  understand what he really observes to judge a business (e.g. restaurant, pub, hotel).
+% Once we have these sets we will give them polarities accordingly to how the user talked about that particular topic. 
+ The hypothesis is that if an user always talks about certain topics then he cares a lot about that topic and this can guide the recommendation system.\\
+Suppose:
+\begin{itemize}
+	\item If the user says that he did NOT like pizza as many times as he DID like it, then pizza is something very important for the user, so the recommendation system will suggest places were pizza as positive reviews.
+	\item If the user always says that it did not like the sofas maybe the user really does not like to seat on sofa when eating (maybe he prefers chairs). So the recommendation system will not suggest any place that as a review talking (positively or negatively) about the sofas.
+\end{itemize}
+In order to suggest which place to recommend, our system will compute the \textit{k-top} topics for a business based on all the reviews for that place (this will be done offline). Once we know both the topics of an user and the topics of a business we will use a similarity function to understand if those topics have the same polarity.
+% The idea, again, is that if an user talks with sentiment about some topic, then he cares about that precise topic, so we want to find businesses that have positive reviews about that same topic.
+We understand that there is plenty of work to be done, so we divided our pipeline as follows:\\
+\begin{enumerate}
+	\item Take reviews and mine topics. This will require some time because we need to understand how many reviews we need about an user to significantly detect his core topics. Then we will analyze those result to understand if the topic detection is enough to extract the user preferences or if we need to add any extra feature (words that appear few times may be very important and yet not detected by the topic modeling algorithm). By the end of this phase we will already have significant results about the feasibility of the recommendation system and \underline{it is considered by itself a possible project ending.}
+	\item Assign polarity to each of the topic detected for an user accordingly to how the user talked about that topic. This will require to use some tool for sentiment analysis of sentences.
+	\item Create a similarity function between clusters of topics to understand if two topics are similar. There is some literature about this, although it is very recent\cite{sim}.
+	\item Create the \textit{k-top} topics for each business, compare it with the user \textit{m-top} topics and the system will return the \textit{top-n} businesses that score higher with respect to the similarity function. 
+\end{enumerate}
+\section{DATA}
+Yelp dataset challenge\cite{yelp}.
+\newpage
+\section{ADDITIONAL INFORMATION}
+We are both two Master Degree students without a thesis.
+Umberto Di Fabrizio is taking the Neural Networks class with Prof.Graupe but has not a project yet.
+\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section*{APPENDIX}
+
+%Appendixes should appear before the acknowledgment.
+
+%\section*{ACKNOWLEDGMENT}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\twocolumn
+\begin{thebibliography}{99}
+
+\bibitem{yelp}\href{www.yelp.com/dataset_challenge}{www.yelp.com/dataset\_challenge}
+%\bibitem{netflix}\href{www.netflixprize.com/index}{www.netflixprize.com/index}
+\bibitem{sim}\href{http://www.aclweb.org/anthology/E14-4#page=42}{Measuring the Similarity between Automatically Generated Topics,2014,Aletras at al.}
+\end{thebibliography}
+
+
+
+
+\end{document}
