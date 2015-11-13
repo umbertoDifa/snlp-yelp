@@ -1,6 +1,7 @@
 __author__ = 'vittorioselo'
 import json
 from collections import defaultdict
+
 def splitTrainAndTest():
     dataAllReview = []
     dataTest = []
@@ -15,6 +16,7 @@ def splitTrainAndTest():
     for line in dataAllReview:
         userCount[line['user_id']] += 1
     print('fanculo')
+    print(userCount)
 
     for key in userCount.keys():
         userCount[key] = round(userCount[key] * 0.9)
@@ -27,8 +29,11 @@ def splitTrainAndTest():
         else:
             dataTest.append(line)
 
-    return dataTrain,dataTest
-
+    return dataTrain, dataTest
+#-------TEST---------
+#A,B = splitTrainAndTest()
+#print(len(A))
+#print(len(B))
 
 
 
