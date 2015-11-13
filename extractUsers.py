@@ -5,6 +5,7 @@ from collections import defaultdict #has the extended version of dict
 import operator #The operator module exports a set of efficient functions corresponding to the intrinsic operators of Python.
                 # For example, operator.add(x, y) is equivalent to the expression x+y
 from utility import calculateFeatures
+from trainAndTest import splitTrainAndTest
 
 #load plain json of edinburgh
 with open('Edinburgh/ReviewsOfResutrantsEdinburgh.json') as inputFile:
@@ -15,8 +16,9 @@ with open('Edinburgh/ReviewsOfResutrantsEdinburghPOS.json') as inputFile:
     dataEdinburghPOS = json.load(inputFile)
 
 #=============create dictionary of how many reviews in Edinburgh for each user
+dataTrain,dataTest = splitTrainAndTest()
 usersCount = defaultdict(int)
-for rev in dataEdinburgh:
+for rev in dataTrain:
     usersCount[rev['user_id']] += 1
 
 #============pick all the user with more than MIN_REVIEWS
