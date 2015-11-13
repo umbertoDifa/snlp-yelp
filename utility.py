@@ -18,6 +18,7 @@ def calculateFeatures(dataEdinburghPOS,user_id):
 
     #collect stop words to avoid ranking those
     cachedStopWords = stopwords.words("english")
+   #cachedStopWords.append('"').append("lots")
 
     #for each review
     for review in  dataEdinburghPOS:

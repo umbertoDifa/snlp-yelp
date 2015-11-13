@@ -4,12 +4,13 @@ import json
 from collections import defaultdict #has the extended version of dict
 import operator #The operator module exports a set of efficient functions corresponding to the intrinsic operators of Python.
                 # For example, operator.add(x, y) is equivalent to the expression x+y
-import calculateFeatures
+from utility import calculateFeatures
 
 #load plain json of edinburgh
 with open('Edinburgh/ReviewsOfResutrantsEdinburgh.json') as inputFile:
     dataEdinburgh = json.load(inputFile)
 #load json of edinburgh with POS
+
 with open('Edinburgh/ReviewsOfResutrantsEdinburghPOS.json') as inputFile:
     dataEdinburghPOS = json.load(inputFile)
 
@@ -27,17 +28,26 @@ res = []
 for i in range(len(bestUsers)):
     res.append(calculateFeatures(dataEdinburghPOS,bestUsers[i][0]))
 
-#==========explore features
-l=list(map(lambda x: [x[0],x[1]['count']], res[1].items()))
-resSort=sorted(l,key=operator.itemgetter(1),reverse=True)
-print(resSort[1:30])
+#==========collect intersection of features
+userFeatures={}
+for i in  range(len(bestUsers)):
+    MAX_FEATURES_TO_INTERSECT = 30
+    MAX_FEATURES_TO_UNITE = 15
+    listOfCount=list(map(lambda x: [x[0],x[1]['count']], res[i].items()))
+    countSorted=sorted(listOfCount,key=operator.itemgetter(1),reverse=True)
+    namesCount=set(list(map(operator.itemgetter(0),countSorted))[0:MAX_FEATURES_TO_INTERSECT])
 
-resSort=sorted(l,key=operator.itemgetter(1),reverse=False)
-print(resSort[1:30])
+    listOfRegularity=list(map(lambda x: [x[0],x[1]['regularity']], res[i].items()))
+    countRegularity=sorted(listOfRegularity,key=operator.itemgetter(1),reverse=True)
+    namesRegularity=set(list(map(operator.itemgetter(0),countRegularity))[0:MAX_FEATURES_TO_INTERSECT])
 
+    intersection = namesCount & namesRegularity
+    len(intersection)
 
-for r in dataEdinburgh:
-    if(r['user_id']==bestUsers[1][0] and 'folk' in r['text']):
-        print('-------------------------------------')
-        print(r['text'])
+    listOfRelevance=list(map(lambda x: [x[0],x[1]['relevance']], res[i].items()))
+    countRelevance=sorted(listOfRelevance,key=operator.itemgetter(1),reverse=True)
+    namesRelevance=set(list(map(operator.itemgetter(0),countRelevance))[0:MAX_FEATURES_TO_UNITE])
 
+    union = intersection | namesRelevance
+    len(union)
+    userFeatures[bestUsers[i][0]] = list(filter(lambda x: x[0] in union, res[i].items()))
