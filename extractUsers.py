@@ -1,12 +1,13 @@
+from sympy.functions.special.bessel import besseli
+
 __author__ = 'Umberto'
 
 import json
 from collections import defaultdict #has the extended version of dict
 import operator #The operator module exports a set of efficient functions corresponding to the intrinsic operators of Python.
                 # For example, operator.add(x, y) is equivalent to the expression x+y
-import pandas as pn
-from utility import calculateFeatures
-from trainAndTest import splitTrainAndTest
+from utility import *
+from trainAndTest import *
 
 #load plain json of edinburgh
 with open('Edinburgh/ReviewsOfResutrantsEdinburgh.json') as inputFile:
@@ -63,31 +64,17 @@ resBusiness = {}
 for i in range(len(testBusinesses)):
     resBusiness[testBusinesses[i]]=calculateFeatures(dataEdinburghPOS,'business_id',testBusinesses[i])
 
+
+
+#============get id of business
+trainBusinesses = list(set(list(map(lambda x: x['business_id'],dataTrain))))
+#===========compute the features for each business
+resTrainBusiness = {}
+for i in range(len(trainBusinesses)):
+    resTrainBusiness[trainBusinesses[i]]=calculateFeatures(dataEdinburghPOS,'business_id',trainBusinesses[i])
+
 #============for each user, find in the test his business
 
-for i in range(len(bestUsers)):
-    for rev in dataTest:
-        if rev['user_id']==bestUsers[i][0]:
-            bestWordsOfUser=list(map(lambda x: x[0], userFeatures[bestUsers[i][0]]))
-            common = list(filter(lambda x: x in bestWordsOfUser,resBusiness[rev['business_id']].keys()))
-            #common = set(resBusiness[rev['business_id']]) & set(res[bestUsers[i][0]])
-            userValuesDictionary=list(map(lambda x: x[1], userFeatures[bestUsers[i][0]]))
 
-            tmp = list()
-            for v in userValuesDictionary:
-                tmp.append(list(v.values()))
-
-            for w in bestWordsOfUser:
-                if w in common:
-                    tmp.append(list(resBusiness[rev['business_id']][w].values()))
-                else:
-                    tmp.append([0,0,0])
-
-             #unflatten
-            tmp = [val for sublist in tmp for val in sublist]
-            #scale perche ci piace
-            tmp = list(map(lambda x: x*10, tmp))
-
-            print(common)
-            print(len(common))
-#============for each business
+dfCreation(dataTrain,'train',bestUsers,userFeatures,resTrainBusiness)
+dfCreation(dataTest,'test',bestUsers,userFeatures,resBusiness)

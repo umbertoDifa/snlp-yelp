@@ -1,6 +1,7 @@
 __author__ = 'Umberto'
 from collections import defaultdict #has the extended version of dict
 from nltk.corpus import stopwords
+import pandas as pn
 
 #return a dictionary of features for each noun used by the user in the reviews
 #right now:
@@ -62,4 +63,38 @@ def calculateFeatures(dataEdinburghPOS,id, idValue):
         words[w]['regularity'] /= numberOfReviews
         words[w]['relevance'] /= numberOfReviews
     return words
+
+
+
+def dfCreation(data, folder, bestUsers, userFeatures, resBusiness):
+    for i in range(len(bestUsers)):
+        print(i)
+        df = pn.DataFrame()
+        for rev in data:
+            if rev['user_id'] == bestUsers[i][0]:
+                bestWordsOfUser = list(map(lambda x: x[0], userFeatures[bestUsers[i][0]]))
+                common = list(filter(lambda x: x in bestWordsOfUser, resBusiness[rev['business_id']].keys()))
+                # common = set(resBusiness[rev['business_id']]) & set(res[bestUsers[i][0]])
+                userValuesDictionary = list(map(lambda x: x[1], userFeatures[bestUsers[i][0]]))
+
+                tmp = list()
+                for v in userValuesDictionary:
+                    tmp.append(list(v.values()))
+
+                for w in bestWordsOfUser:
+                    if w in common:
+                        tmp.append(list(resBusiness[rev['business_id']][w].values()))
+                    else:
+                        tmp.append([0, 0, 0])
+
+                        # unflatten
+                tmp = [val for sublist in tmp for val in sublist]
+                # scale perche ci piace
+                tmp = list(map(lambda x: x * 10, tmp))
+                tmp.append(rev['stars'] / 5)
+                df = df.append(pn.Series(tmp), ignore_index=True)
+        path = folder+'/' + bestUsers[i][0] + '.csv'
+        df.ix[:,0:len(bestWordsOfUser)*2 - 2].to_csv(path, header=False, index_label=False, index=False)
+        pathRank = folder+'/stars/' + bestUsers[i][0] + '.csv'
+        df.ix[:,len(bestWordsOfUser)*2 - 1:].to_csv(pathRank, header=False, index_label=False, index=False)
 

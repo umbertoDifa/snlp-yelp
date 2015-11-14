@@ -15,7 +15,6 @@ def splitTrainAndTest():
 
     for line in dataAllReview:
         userCount[line['user_id']] += 1
-    print('fanculo')
     print(userCount)
 
     for key in userCount.keys():
@@ -28,7 +27,6 @@ def splitTrainAndTest():
             dataTrain.append(line)
         else:
             dataTest.append(line)
-    print('fatto')
     return dataTrain, dataTest
 #-------TEST---------
 #A,B = splitTrainAndTest()
