@@ -8,7 +8,7 @@ from nltk.corpus import stopwords
 #noun frequency
 #noun weighted frequency
 #noun weighted rank
-def calculateFeatures(dataEdinburghPOS,user_id):
+def calculateFeatures(dataEdinburghPOS,id, idValue):
     totalWordsCount = 0    # parole(NOMI!) usate in totale dall'utente
     numberOfReviews = 0    # review totali per un utente (ad edinburgh)
 
@@ -23,7 +23,7 @@ def calculateFeatures(dataEdinburghPOS,user_id):
     #for each review
     for review in  dataEdinburghPOS:
         #if the review is of of that user
-        if(review['user_id']==user_id):
+        if(review[id]==idValue):
             #reset the number of words in the current review
             countOfwordsInReview = 0
             #create dicotionary to store words of a single review

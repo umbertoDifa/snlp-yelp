@@ -23,12 +23,12 @@ def splitTrainAndTest():
 
 
     for line in dataAllReview:
-        if(userCount[line['user_id']]>= 0):
+        if(userCount[line['user_id']]> 0):
             userCount[line['user_id']] -= 1
             dataTrain.append(line)
         else:
             dataTest.append(line)
-
+    print('fatto')
     return dataTrain, dataTest
 #-------TEST---------
 #A,B = splitTrainAndTest()
