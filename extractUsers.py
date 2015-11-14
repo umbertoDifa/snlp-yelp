@@ -18,7 +18,10 @@ with open('Edinburgh/ReviewsOfResutrantsEdinburghPOS.json') as inputFile:
     dataEdinburghPOS = json.load(inputFile)
 
 #=============create dictionary of how many reviews in Edinburgh for each user
-dataTrain,dataTest = splitTrainAndTest()
+dataTrain,dataTest, dataValidation = splitTrainValidationAndTest()
+print(len(dataTrain))
+print(len(dataTest))
+print(len(dataValidation))
 usersCount = defaultdict(int)
 for rev in dataTrain:
     usersCount[rev['user_id']] += 1
@@ -73,8 +76,19 @@ resTrainBusiness = {}
 for i in range(len(trainBusinesses)):
     resTrainBusiness[trainBusinesses[i]]=calculateFeatures(dataEdinburghPOS,'business_id',trainBusinesses[i])
 
+#============get id of business
+validationBusinesses = list(set(list(map(lambda x: x['business_id'],dataValidation))))
+#===========compute the features for each business
+resValidationBusiness = {}
+for i in range(len(validationBusinesses)):
+    resValidationBusiness[validationBusinesses[i]]=calculateFeatures(dataEdinburghPOS,'business_id',validationBusinesses[i])
+
 #============for each user, find in the test his business
+
+
 
 
 dfCreation(dataTrain,'train',bestUsers,userFeatures,resTrainBusiness)
 dfCreation(dataTest,'test',bestUsers,userFeatures,resBusiness)
+dfCreation(dataValidation, 'validation',bestUsers,userFeatures,resValidationBusiness)
+
