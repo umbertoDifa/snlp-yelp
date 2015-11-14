@@ -70,6 +70,7 @@ def dfCreation(data, folder, bestUsers, userFeatures, resBusiness):
     for i in range(len(bestUsers)):
         print(i)
         df = pn.DataFrame()
+        dfRank = pn.DataFrame()
         for rev in data:
             if rev['user_id'] == bestUsers[i][0]:
                 bestWordsOfUser = list(map(lambda x: x[0], userFeatures[bestUsers[i][0]]))
@@ -91,10 +92,10 @@ def dfCreation(data, folder, bestUsers, userFeatures, resBusiness):
                 tmp = [val for sublist in tmp for val in sublist]
                 # scale perche ci piace
                 tmp = list(map(lambda x: x * 10, tmp))
-                tmp.append(rev['stars'] / 5)
                 df = df.append(pn.Series(tmp), ignore_index=True)
+                dfRank = dfRank.append(pn.Series(rev['stars']/5), ignore_index=True)
         path = folder+'/' + bestUsers[i][0] + '.csv'
-        df.ix[:,0:len(bestWordsOfUser)*2 - 2].to_csv(path, header=False, index_label=False, index=False)
+        df.to_csv(path, header=False, index_label=False, index=False)
         pathRank = folder+'/stars/' + bestUsers[i][0] + '.csv'
-        df.ix[:,len(bestWordsOfUser)*2 - 1:].to_csv(pathRank, header=False, index_label=False, index=False)
+        dfRank.to_csv(pathRank, header=False, index_label=False, index=False)
 
