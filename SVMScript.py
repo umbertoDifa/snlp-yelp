@@ -35,7 +35,7 @@ for user in listUsers:
     trainRank = [val for sublist in trainRank for val in sublist]
     trainRank = list(map(lambda x: int(x*5), trainRank))
 
-    #=========READING TEST SET =========
+    #=========READING VALIDATION SET =========
     dataValidation = numpy.array(pandas.read_csv('validation/'+user, header=None))
     testValidation = numpy.array(pandas.read_csv('validation/stars/'+user, header=None))
 
