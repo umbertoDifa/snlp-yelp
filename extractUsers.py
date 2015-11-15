@@ -27,7 +27,7 @@ for rev in dataTrain:
     usersCount[rev['user_id']] += 1
 
 #============pick all the user with more than MIN_REVIEWS
-MIN_REVIEWS = 30
+MIN_REVIEWS = 20
 bestUsers = [user for user in list(usersCount.items()) if user[1]>=MIN_REVIEWS]
 
 #===========compute the features for each user

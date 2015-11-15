@@ -49,6 +49,7 @@ for user in listUsers:
     clf1.decision_function_shape = 'ovr'
     clf1.fit(dataTrain, trainRank)
 
+
     clf2 = svm.SVC() #LINEAR
     clf2.decision_function_shape ='ovr'
     clf2.kernel = 'linear'
@@ -56,10 +57,12 @@ for user in listUsers:
     #==========MAX ENT ==========
     logreg = linear_model.LogisticRegression()
     logreg.solver = 'lbfgs'
+    logreg.class_weight = 'balanced'
+    logreg.multi_class = 'ovr'
     logreg.fit(dataTrain, trainRank)
 
     #========RANDOM FOREST ==========
-    #forest = RandomForestClassifier(n_estimators=200)
+    #forest = RandomForestClassifier(n_estimators=400)
     #forest.fit(dataTrain, trainRank)
 
     #========CHOOSING PREDICTOR BASE ON VALDATION SET=========
@@ -105,7 +108,17 @@ for user in dictResults.keys():
 
 accuracy /= len(listUsers)
 
-print(accuracy) #ACC 0.457867937661
+print(accuracy)
+#MIN REVIEWS 20
+#ACC .440034368038 -> nothing
+#ACC 0.44557621985(100) or ACC .439697162345 -> noun
+#ACC .440811294272(1000) -> noun
+#ACC .431338910892 -> noun +ADJECTIVES
+#ACC 0.431338910892 -> +tree
+
+#MIN REVIEWS 25
+#ACC .44561866312 -> (100)
 
 #BASELINE
-#ACC 0.449273749986
+#ACC 0.435761862735 -> min reviews 20 in the train
+#ACC .445806071416 -> min reviews 25 in the train

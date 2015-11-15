@@ -40,8 +40,8 @@ def calculateFeatures(dataEdinburghPOS,id, idValue):
                     word = wordPlusTag[0]
                     tag = wordPlusTag[1]
                     #if the tag is a noun
-                    if( (tag=='NN' or tag == 'NNS' )
-                       and (word not in cachedStopWords)):
+                    if( (tag == 'NN' or tag == 'NNS') #or tag == 'JJ' or tag == 'JJS')
+                       and not (word in cachedStopWords)):
                         #increase the total number of words
                         totalWordsCount += 1
                         #increase the number of words in the review
@@ -91,7 +91,7 @@ def dfCreation(data, folder, bestUsers, userFeatures, resBusiness):
                         # unflatten
                 tmp = [val for sublist in tmp for val in sublist]
                 # scale perche ci piace
-                tmp = list(map(lambda x: x * 10, tmp))
+                tmp = list(map(lambda x: x * 100, tmp))
                 df = df.append(pn.Series(tmp), ignore_index=True)
                 dfRank = dfRank.append(pn.Series(rev['stars']/5), ignore_index=True)
         path = folder+'/' + bestUsers[i][0] + '.csv'
