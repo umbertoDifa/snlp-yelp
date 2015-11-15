@@ -1,0 +1,149 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+%\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%
+\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+
+
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+%\usepackage{amsmath} % assumes amsmath package installed
+%\usepackage{amssymb}  % assumes amsmath package installed
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+
+%mypackages
+\usepackage{amsmath}
+ \usepackage[table,xcdraw]{xcolor}
+\usepackage[pdftex]{graphicx}
+\usepackage[english]{babel}
+\usepackage{geometry} 
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{movie15}
+
+\usepackage{fancyhdr} 
+\usepackage{listings}
+\definecolor{light-gray}{gray}{0.95}
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+
+\usepackage[hyperfootnotes=false]{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	colorlinks=false,
+	urlbordercolor=white,
+	citebordercolor=black,
+	linkbordercolor = red
+}
+\title{
+		%\vspace{-1in} 	
+		\usefont{OT1}{bch}{b}{n}
+		\normalfont \normalsize \textsc{University of Illinois At Chicago\\CS521 - Statistical Natural Language Processing} \\ [25pt]
+		\horrule{2pt} \\[0.4cm]
+		\huge Project Progress Report \\
+		\horrule{2pt} \\[0.3cm]
+}
+\author{
+		\normalfont 								\large
+         MS.Umberto Di Fabrizio, MS.Vittorio Selo\\		\normalsize
+        \today \\[0.5cm]
+}
+\date{}
+
+\geometry{margin=0.7in}
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{PROBLEM STATEMENT}
+Our purpose is to create a recommendation system for Yelp. In order to achieve this we decided to exploit NLP techniques to extract \textit{hidden features} in the users' reviews. Once we have a model with those features we can predict the score that a user would give to a business thus we can recommend to the user a business he will like.
+\section{IDENTIFIED MODEL}
+The main idea is to understand which are the features that a particular user observes in a business therefore we can 'profile' an user. For each user we build a model that generalize his tastes and we use it to predict the likelihood that the user will like an other business.\\
+We use the reviews of a certain user together with the stars (=rank) that he gives to the businesses to create our features. Because of the dimensions of the dataset and the computational power we have access to, we decided to limit our investigation to businesses in the area of Edinburgh and only those which are restaurants (11611 reviews, 2375 users,1112 businesses). Anyway this work can be easily generalized to the all dataset.\\
+For each user we scan his reviews, we detect the nouns that he uses\footnote{we believe that those are the '\textit{things}' that he observes in the businesses} and for each noun we collect three features.
+Let M be the set of all users, R the set of all reviews.
+Given user m $\in$ M let $r_m$ be the set of all reviews of user m then define $X_m$ as the set of all nouns of the user m.
+Let $n_{xmz}$ be the number of times that the word x belonging to $X_m$ appear in review z $\in$ $r_m.$
+Let $s_{mz}$ be the rank that user m gave to review z.\\
+Now we can define:
+\begin{itemize}
+	\item \textbf{Frequency}: frequency of that noun compared to the other nouns used\\
+	i.e. how much the user talks about X?
+	\[ f(x,m)= \frac{\sum_{i \in r_m}n_{xmi}}{\sum_{i \in r_m}\sum_{k \in X_m} n_{kmi}} \]
+	\item \textbf{Regularity}: how constantly is that noun used in the reviews\\
+	i.e. does the user talks about X in most of the reviews or not?
+	\[ r(x,m)= \frac{\sum_{i \in r_m}
+		n_{xmi}  \frac{1}{\sum_{k \in X_m}n_{kmi}}}	
+				{|r_m|} \]
+	\item \textbf{Relevance}: how influent is the noun to predict the rank?\\
+	i.e. is X important to the final business score?
+	\[ i(x,m)= \frac{\sum_{i \in r_m}
+		n_{xmi}  \frac{s_{mi}}{\sum_{k \in X_m}n_{kmi}}}	
+	{|r_m|} \]
+\end{itemize}
+Once we have those 3 features for each noun of a user we select the top 30 (= best nouns) between those that have the highest values in both of the 3 features: we want nouns that are frequent AND regular AND relevant. Because it is an intersection operation in the best case we will have 30 nouns in the worst 0 (never happened, average is 26).\\
+We run the same algorithm to collect noun and their features for the businesses.
+\section{PREPROCESSING}
+We tokenize our dataset using the tweeter tokenizer (keeps smilies ':)'), then we use the nltk package for python trained on the  Penn Tree Bank dataset for the POS-tagging.\\
+For each noun we calculate the three features explained in the previous section.
+In the end for each user we have his\textit{ best nouns} with their relative 3 hidden-features and for each business we have its nouns with their 3 hidden-features. For each best noun of a user we look in the business to check if it has that word, in this case the business values for that word are collected otherwise [0,0,0] is assigned.
+In the end we have a vector:\\
+$[$User best nouns$][$Business word in common with user $]$\\
+for each user-business couple.
+So the length of the feature vector is 2* $|\text{best user noun}|$.
+\section{CLASSIFICATION}
+For each user which has more than 20 reviews, we select 90\% of reviews to be used in the train and 10\% in the test.
+We train an SVM with the features vector as input and the rank of the business (accordingly to the user) as target output.\\
+We take the business in the test (we know how the user ranked them) and we predict the score with the SVM. Right now the accuracy is 41.1\%, if we consider the random baseline 11\% (because 9 classes predictable), the model seems to work pretty good.
+
+\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section*{APPENDIX}
+
+%Appendixes should appear before the acknowledgment.
+
+%\section*{ACKNOWLEDGMENT}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
