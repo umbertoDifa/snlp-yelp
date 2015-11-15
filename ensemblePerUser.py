@@ -72,11 +72,11 @@ for user in listUsers:
     acc2 = metrics.accuracy_score(validationRank, pre2)
     acc3 = metrics.accuracy_score(validationRank, pre3)
     #acc4 = metrics.accuracy_score(validationRank, pre4)
-    print('============')
-    print(user)
-    print(acc1)
-    print(acc2)
-    print(acc3)
+    #print('============')
+    #print(user)
+    #print(acc1)
+    #print(acc2)
+    #print(acc3)
     #print(acc4)
 
     prediction = float()
@@ -96,15 +96,16 @@ for user in listUsers:
     dictResults[user] = metrics.accuracy_score(testRank, prediction)
 
 accuracy = float()
+
 for user in dictResults.keys():
-    accuracy += dictResults[user]
+        accuracy += dictResults[user]
     #print('========')
     #print(user)
     #print(dictResults[user])
 
 accuracy /= len(listUsers)
 
-print(accuracy) #ACC 0.437906779525
+print(accuracy) #ACC 0.457867937661
 
 #BASELINE
-#ACC 0.435761862735
+#ACC 0.449273749986
