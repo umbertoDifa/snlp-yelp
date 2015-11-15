@@ -60,7 +60,7 @@ for user in listUsers:
     predicted = clf.predict(dataValidation)
 
     #===========MAXENT FITTING ==========
-    logreg.fit(dataTrain, trainRank) #ACC .445197321447 / WEIGHTACC .435919458245
+    logreg.fit(dataTrain, trainRank) #ACC .44
     #==========MAXENT PREDICTION ========
     maxentPrediction = logreg.predict(dataValidation)
     #SAVING RESULT SVM
