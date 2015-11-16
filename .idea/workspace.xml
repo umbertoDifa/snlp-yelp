@@ -29,8 +29,8 @@
       <file leaf-file-name="extractUsers.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/extractUsers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.82608694">
-              <caret line="70" column="12" selection-start-line="70" selection-start-column="12" selection-end-line="70" selection-end-column="12" />
+            <state vertical-scroll-proportion="1.3913044">
+              <caret line="83" column="12" selection-start-line="83" selection-start-column="12" selection-end-line="83" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -85,9 +85,9 @@
       <list>
         <option value="$PROJECT_DIR$/calculateFeatures.py" />
         <option value="$PROJECT_DIR$/extractBusiness.py" />
-        <option value="$PROJECT_DIR$/extractUsers.py" />
         <option value="$PROJECT_DIR$/trainAndTest.py" />
         <option value="$PROJECT_DIR$/utility.py" />
+        <option value="$PROJECT_DIR$/extractUsers.py" />
       </list>
     </option>
   </component>
@@ -683,8 +683,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/extractUsers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.82608694">
-          <caret line="70" column="12" selection-start-line="70" selection-start-column="12" selection-end-line="70" selection-end-column="12" />
+        <state vertical-scroll-proportion="1.3913044">
+          <caret line="83" column="12" selection-start-line="83" selection-start-column="12" selection-end-line="83" selection-end-column="12" />
           <folding />
         </state>
       </provider>

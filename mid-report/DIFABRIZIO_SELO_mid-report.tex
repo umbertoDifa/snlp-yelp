@@ -119,7 +119,8 @@ So the length of the feature vector is 2* $|\text{best user noun}|$.
 \section{CLASSIFICATION}
 For each user which has more than 20 reviews, we select 90\% of reviews to be used in the train and 10\% in the test.
 We train an SVM with the features vector as input and the rank of the business (accordingly to the user) as target output.\\
-We take the business in the test (we know how the user ranked them) and we predict the score with the SVM. Right now the accuracy is 41.1\%, if we consider the random baseline 11\% (because 9 classes predictable), the model seems to work pretty good.
+We take the business in the test (we know how the user ranked them) and we predict the score with the SVM. Right now the accuracy is 44.5\%, whilst the majority class is 43.5\%.
+The improvement right now does not seem exciting, anyway we believe that some of the words selected by the algorithm are not meaningful such as 'bit','restaurant' and other 'common' words. Our plan is to try to improve the word selection in order to extract better words and to use user that have more than 50 reviews so that each user can be modeled better.
 
 \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
