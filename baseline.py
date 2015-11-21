@@ -5,6 +5,7 @@ import pandas
 import numpy
 from collections import defaultdict
 from sklearn import metrics
+from errorAnalysis import *
 
 
 myPath = 'trainAll/'
@@ -13,7 +14,8 @@ listUsers = [f for f in os.listdir(str(myPath)) if isfile(join(myPath, f))]
 
 dictResult = defaultdict(float)
 
-
+averageError = float()
+errorSet = int()
 for user in listUsers:
     dictCount = defaultdict(int)
     majority = float()
@@ -45,6 +47,9 @@ for user in listUsers:
 
     dictResult[user] = metrics.accuracy_score(testRank, prediction)
 
+    averageError += meanError(prediction,testRank)
+    errorSet += setError(prediction,testRank)
+
 accuracy = float()
 for key in dictResult.keys():
     accuracy += dictResult[key]
@@ -52,6 +57,10 @@ for key in dictResult.keys():
 accuracy /= len(listUsers)
 
 print(accuracy)
+print('=============ERROR=========')
+print(averageError/len(listUsers)) #=> -0.15346161033753716
+print(errorSet) #=> 736
+
 
 # trainAll, minReview 20: 0.441929922377 -> test same
 # trainAll, minReview 50: 0.449429999815 -> test 0.454907309474

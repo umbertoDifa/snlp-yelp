@@ -10,6 +10,7 @@ from os.path import join, isfile
 from collections import defaultdict
 from sklearn import linear_model
 from sklearn.ensemble import RandomForestClassifier
+from errorAnalysis import *
 
 
 listUsers = list()
@@ -20,12 +21,15 @@ listUsers = [f for f in os.listdir(str(myPath)) if isfile(join(myPath, f))]
 
 dictResults = defaultdict(float)
 
+averageError = float()
+errorSet = int()
+
 for user in listUsers:
     #======READING TRAIN SET========
     dataTrain = numpy.array(pandas.read_csv('trainAll/'+user, header=None))
     trainRank = numpy.array(pandas.read_csv('trainAll/stars/'+user, header=None))
 
-    #Need flat list
+    #Need flat listaverageError  =float()
     trainRank = [val for sublist in trainRank for val in sublist]
     trainRank = list(map(lambda x: int(x*5), trainRank))
 
@@ -97,6 +101,9 @@ for user in listUsers:
         #print('3')
 
     dictResults[user] = metrics.accuracy_score(testRank, prediction)
+    averageError += meanError(prediction,testRank)
+    errorSet += setError(prediction,testRank)
+
 
 accuracy = float()
 
@@ -112,6 +119,10 @@ for user in dictResults.keys():
 accuracy /= len(listUsers)
 
 print(accuracy)
+print('=============ERROR ANALYSIS=========')
+print(averageError/len(listUsers)) #=> -0.10255116044
+print(errorSet) #=> 779
+
 #MIN REVIEWS 20
 #ACC .440034368038 -> nothing
 #ACC 0.44557621985(100) or ACC .439697162345 -> noun
