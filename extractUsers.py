@@ -9,16 +9,8 @@ import operator #The operator module exports a set of efficient functions corres
 from utility import *
 from trainAndTest import *
 
-#load plain json of edinburgh
-with open('Edinburgh/ReviewsOfResutrantsEdinburgh.json') as inputFile:
-    dataEdinburgh = json.load(inputFile)
-#load json of edinburgh with POS
-
-with open('Edinburgh/ReviewsOfResutrantsEdinburghPOS.json') as inputFile:
-    dataEdinburghPOS = json.load(inputFile)
-
 #=============create dictionary of how many reviews in Edinburgh for each user
-dataTrain,dataTest, dataValidation = splitTrainValidationAndTest()
+dataTrain,dataTest, dataValidation,dataEdinburghPOS = splitTrainValidationAndTest()
 print(len(dataTrain))
 print(len(dataTest))
 print(len(dataValidation))
@@ -27,7 +19,7 @@ for rev in dataTrain:
     usersCount[rev['user_id']] += 1
 
 #============pick all the user with more than MIN_REVIEWS
-MIN_REVIEWS = 20
+MIN_REVIEWS = 50
 bestUsers = [user for user in list(usersCount.items()) if user[1]>=MIN_REVIEWS]
 
 #===========compute the features for each user
@@ -38,8 +30,8 @@ for i in range(len(bestUsers)):
 #==========collect intersection of features
 userFeatures={}
 for i in  range(len(bestUsers)):
-    MAX_FEATURES_TO_INTERSECT = 30
-    MAX_FEATURES_TO_UNITE = 15
+    MAX_FEATURES_TO_INTERSECT = 50
+    MAX_FEATURES_TO_UNITE = 50
     listOfCount=list(map(lambda x: [x[0],x[1]['count']], res[bestUsers[i][0]].items()))
     countSorted=sorted(listOfCount,key=operator.itemgetter(1),reverse=True)
     namesCount=set(list(map(operator.itemgetter(0),countSorted))[0:MAX_FEATURES_TO_INTERSECT])
@@ -88,7 +80,7 @@ for i in range(len(validationBusinesses)):
 
 
 
-dfCreation(dataTrain,'train',bestUsers,userFeatures,resTrainBusiness)
-dfCreation(dataTest,'test',bestUsers,userFeatures,resBusiness)
-dfCreation(dataValidation, 'validation',bestUsers,userFeatures,resValidationBusiness)
+dfCreation(dataTrain,'trainAll',bestUsers,userFeatures,resTrainBusiness)
+dfCreation(dataTest,'testAll',bestUsers,userFeatures,resBusiness)
+dfCreation(dataValidation, 'validationAll',bestUsers,userFeatures,resValidationBusiness)
 

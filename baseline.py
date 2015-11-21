@@ -7,9 +7,9 @@ from collections import defaultdict
 from sklearn import metrics
 
 
-myPath = 'train/'
+myPath = 'trainAll/'
 listUsers = [f for f in os.listdir(str(myPath)) if isfile(join(myPath, f))]
-listUsers.remove('.DS_Store')
+#listUsers.remove('.DS_Store')
 
 dictResult = defaultdict(float)
 
@@ -17,15 +17,15 @@ dictResult = defaultdict(float)
 for user in listUsers:
     dictCount = defaultdict(int)
     majority = float()
-    trainRank = numpy.array(pandas.read_csv('train/stars/'+user, header=None))
+    trainRank = numpy.array(pandas.read_csv('trainAll/stars/'+user, header=None))
     trainRank = [val for sublist in trainRank for val in sublist]
     trainRank = list(map(lambda x: int(x*5), trainRank))
 
-    validationRank = numpy.array(pandas.read_csv('validation/stars/'+user, header=None))
+    validationRank = numpy.array(pandas.read_csv('validationAll/stars/'+user, header=None))
     validationRank = [val for sublist in validationRank for val in sublist]
     validationRank = list(map(lambda x: int(x*5), validationRank))
 
-    testRank = numpy.array(pandas.read_csv('test/stars/'+user, header=None))
+    testRank = numpy.array(pandas.read_csv('testAll/stars/'+user, header=None))
     testRank = [val for sublist in testRank for val in sublist]
     testRank = list(map(lambda x: int(x*5), testRank))
 
@@ -53,7 +53,8 @@ accuracy /= len(listUsers)
 
 print(accuracy)
 
-
+# trainAll, minReview 20: 0.441929922377 -> test same
+# trainAll, minReview 50: 0.449429999815 -> test 0.454907309474
 
 
 

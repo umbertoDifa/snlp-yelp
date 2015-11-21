@@ -10,8 +10,10 @@ def splitTrainValidationAndTest():
 
     userCount = defaultdict(int)
     userCount10Perc = defaultdict(int)
+    path = 'Edinburgh/ReviewsOfbusinessEdinburgh.json' #'Edinburgh/ReviewsOfResutrantsEdinburgh.json'
+    pathPOS = 'Edinburgh/ReviewsOfEdinburghPOS.json' # 'Edinburgh/ReviewsOfResutrantsEdinburghPOS.json'
 
-    with open('Edinburgh/ReviewsOfResutrantsEdinburgh.json') as inputFile:
+    with open(path) as inputFile:
         dataAllReview = json.load(inputFile)
         print(str(inputFile))
 
@@ -33,7 +35,12 @@ def splitTrainValidationAndTest():
             dataValidation.append(line)
         else:
             dataTest.append(line)
-    return dataTrain, dataTest, dataValidation
+
+    #load json of edinburgh with POS
+    with open(pathPOS) as inputFile:
+        dataEdinburghPOS = json.load(inputFile)
+
+    return dataTrain, dataTest, dataValidation,dataEdinburghPOS
 #-------TEST---------
 #A,B = splitTrainAndTest()
 #print(len(A))

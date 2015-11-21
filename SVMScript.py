@@ -9,10 +9,10 @@ from collections import defaultdict
 from sklearn import linear_model
 
 listUsers = list()
-myPath = 'train/'
+myPath = 'trainAll/'
 
 listUsers = [f for f in os.listdir(str(myPath)) if isfile(join(myPath, f))]
-listUsers.remove('.DS_Store')
+#listUsers.remove('.DS_Store')
 
 dictResult = defaultdict(list)
 
@@ -28,16 +28,16 @@ dictMAXENTTest = defaultdict(float)
 
 for user in listUsers:
     #======READING TRAIN SET========
-    dataTrain = numpy.array(pandas.read_csv('train/'+user, header=None))
-    trainRank = numpy.array(pandas.read_csv('train/stars/'+user, header=None))
+    dataTrain = numpy.array(pandas.read_csv('trainAll/'+user, header=None))
+    trainRank = numpy.array(pandas.read_csv('trainAll/stars/'+user, header=None))
 
     #Need flat list
     trainRank = [val for sublist in trainRank for val in sublist]
     trainRank = list(map(lambda x: int(x*5), trainRank))
 
     #=========READING VALIDATION SET =========
-    dataValidation = numpy.array(pandas.read_csv('validation/'+user, header=None))
-    testValidation = numpy.array(pandas.read_csv('validation/stars/'+user, header=None))
+    dataValidation = numpy.array(pandas.read_csv('validationAll/'+user, header=None))
+    testValidation = numpy.array(pandas.read_csv('validationAll/stars/'+user, header=None))
 
 
     testValidation = [val for sublist in testValidation for val in sublist]
@@ -73,8 +73,8 @@ for user in listUsers:
     dictPredictor[user].append(clf)
     dictPredictor[user].append(logreg)
     #============PREDICTION ON TEST==============
-    dataTest = numpy.array(pandas.read_csv('test/'+user, header=None))
-    testRank = numpy.array(pandas.read_csv('test/stars/'+user, header=None))
+    dataTest = numpy.array(pandas.read_csv('testAll/'+user, header=None))
+    testRank = numpy.array(pandas.read_csv('testAll/stars/'+user, header=None))
 
     testRank = [val for sublist in testRank for val in sublist]
     testRank = list(map(lambda x: int(x*5), testRank))
@@ -205,8 +205,8 @@ for x in users:
 #=========== PREDICTION ON REAL DATASET =========#
 
 for user in dictPredictor.keys():
-    dataTest = numpy.array(pandas.read_csv('test/'+user, header=None))
-    testRank = numpy.array(pandas.read_csv('test/stars/'+user, header=None))
+    dataTest = numpy.array(pandas.read_csv('testAll/'+user, header=None))
+    testRank = numpy.array(pandas.read_csv('testAll/stars/'+user, header=None))
 
     testRank = [val for sublist in testRank for val in sublist]
     testRank = list(map(lambda x: int(x*5), testRank))

@@ -2,7 +2,8 @@ __author__ = 'Umberto'
 from collections import defaultdict #has the extended version of dict
 from nltk.corpus import stopwords
 import pandas as pn
-
+import json
+import csv
 #return a dictionary of features for each noun used by the user in the reviews
 #right now:
 #noun
@@ -40,7 +41,7 @@ def calculateFeatures(dataEdinburghPOS,id, idValue):
                     word = wordPlusTag[0]
                     tag = wordPlusTag[1]
                     #if the tag is a noun
-                    if( (tag == 'NN' or tag == 'NNS') #or tag == 'JJ' or tag == 'JJS')
+                    if( (tag == 'NN' or tag == 'NNS') or (tag=='RB' or tag=='RBR' or tag=='RBS') or (tag=='JJ' or tag=='JJS' or tag== 'JJR')# #or tag == 'JJ' or tag == 'JJS')
                        and not (word in cachedStopWords)):
                         #increase the total number of words
                         totalWordsCount += 1
@@ -99,3 +100,24 @@ def dfCreation(data, folder, bestUsers, userFeatures, resBusiness):
         pathRank = folder+'/stars/' + bestUsers[i][0] + '.csv'
         dfRank.to_csv(pathRank, header=False, index_label=False, index=False)
 
+
+def printUserReviews(user,path):
+    with open(path) as inputFile:
+        data = json.load(inputFile)
+    d=''
+    for rev in data:
+        #print(rev)
+        if rev['user_id']==user:
+          #  print('----------------------------------------------')
+          #  print(rev['text'])
+            d+=rev['text']
+
+    print(d)
+    with open('output.txt','w') as out:
+        out.write(d)
+
+
+
+#printUserReviews('In6L6fy4jFlN0E-LEZXGiw','Edinburgh/ReviewsOfbusinessEdinburgh.json')
+printUserReviews('wx12_24dFiL1Pc0H_PygLw','Edinburgh/ReviewsOfbusinessEdinburgh.json')
+printUserReviews('2pxcprc3GGAeI_RM88-Cgw','Edinburgh/ReviewsOfbusinessEdinburgh.json')
