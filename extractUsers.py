@@ -73,7 +73,7 @@ validationBusinesses = list(set(list(map(lambda x: x['business_id'],dataValidati
 #===========compute the features for each business
 resValidationBusiness = {}
 for i in range(len(validationBusinesses)):
-    resValidationBusiness[validationBusinesses[i]]=calculateFeatures(dataEdinburghPOS,'business_id',validationBusinesses[i])
+    resValidationBusiness[validationBusinesses[i]]=calculateFeatures(len,'business_id',validationBusinesses[i])
 
 #============for each user, find in the test his business
 

@@ -119,5 +119,55 @@ def printUserReviews(user,path):
 
 
 #printUserReviews('In6L6fy4jFlN0E-LEZXGiw','Edinburgh/ReviewsOfbusinessEdinburgh.json')
-printUserReviews('wx12_24dFiL1Pc0H_PygLw','Edinburgh/ReviewsOfbusinessEdinburgh.json')
-printUserReviews('2pxcprc3GGAeI_RM88-Cgw','Edinburgh/ReviewsOfbusinessEdinburgh.json')
+#printUserReviews('wx12_24dFiL1Pc0H_PygLw','Edinburgh/ReviewsOfbusinessEdinburgh.json')
+#printUserReviews('2pxcprc3GGAeI_RM88-Cgw','Edinburgh/ReviewsOfbusinessEdinburgh.json')
+
+def calculateBigrams(dataEdinburghPOS,id, idValue):
+    #=====function to add bigrams to a certain review rank
+    def addPreAndPostBigram(idx,sentence,rank):
+        #if there is a word after
+        if idx+1 < len(sentence) and (sentence[idx+1][1]=='JJ' or sentence[idx+1][1]=='JJS' or sentence[idx+1][1]== 'JJR')\
+                and not (sentence[idx+1][0] in cachedStopWords):
+           # print(sentence[idx],sentence[idx+1])
+            bigramsRank[rank-1][sentence[idx][0]+'_'+sentence[idx+1][0]]['count'] +=1
+        #if there is a word before
+        if idx-1 >= 0 and (sentence[idx-1][1]=='JJ' or sentence[idx-1][1]=='JJS' or sentence[idx-1][1]== 'JJR')\
+                and not (sentence[idx-1][0] in cachedStopWords):
+            bigramsRank[rank-1][sentence[idx][0]+'_'+sentence[idx-1][0]]['count'] +=1
+
+
+    bigramsRank=[defaultdict(lambda: defaultdict(float)) for x in range (5)]
+
+    #collect stop words to avoid ranking those
+    cachedStopWords = stopwords.words("english")
+   #cachedStopWords.append('"').append("lots")
+
+    #for each review
+    for review in  dataEdinburghPOS:
+        #if the review is of that user
+        if(review[id]==idValue):
+
+            #for each sentence in the review
+            for sentence in review['text']:
+                #for each pair of word,tag in the sentence
+                for idx, wordPlusTag in enumerate(sentence):
+                #for wordPlusTag in sentence:
+                    #split the word and tag
+                    word = wordPlusTag[0]
+                    tag = wordPlusTag[1]
+                    #if the tag is a noun
+                    #and the noun is not a stopword
+                    if( (tag == 'NN' or tag == 'NNS')# or (tag=='RB' or tag=='RBR' or tag=='RBS') or (tag=='JJ' or tag=='JJS' or tag== 'JJR')# #or tag == 'JJ' or tag == 'JJS')
+                       and not (word in cachedStopWords)):
+                        addPreAndPostBigram(idx,sentence,truncate(review['stars']))
+
+
+
+    return bigramsRank
+
+a=calculateBigrams(dataEdinburghPOS,'user_id','7DxQDfrnoQI9nGALyi-LyQ')
+listOfCount=list(map(lambda x: [x[0],x[1]['count']], a[1].items()))
+countSorted=sorted(listOfCount,key=operator.itemgetter(1),reverse=True)
+
+def truncate(number):
+    return int(str(number).split('.')[0])
