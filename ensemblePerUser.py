@@ -23,8 +23,10 @@ dictResults = defaultdict(float)
 
 averageError = float()
 errorSet = int()
-
+i=0
 for user in listUsers:
+    print(i)
+    i+=1
     #======READING TRAIN SET========
     dataTrain = numpy.array(pandas.read_csv('trainAll/'+user, header=None))
     trainRank = numpy.array(pandas.read_csv('trainAll/stars/'+user, header=None))
@@ -132,6 +134,9 @@ print(errorSet) #=> 779
 
 #MIN REVIEWS 25
 #ACC .44561866312 -> (100)
+
+#MIN REV 50
+#acc 0.455 (1000 feautes)
 
 #BASELINE
 #ACC 0.435761862735 -> min reviews 20 in the train

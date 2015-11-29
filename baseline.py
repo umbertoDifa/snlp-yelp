@@ -1,4 +1,3 @@
-__author__ = 'vittorioselo'
 import os
 from os.path import join, isfile
 import pandas

@@ -1,0 +1,252 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+%\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%
+\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+
+
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+%\usepackage{amsmath} % assumes amsmath package installed
+%\usepackage{amssymb}  % assumes amsmath package installed
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+
+%mypackages
+\usepackage{amsmath}
+ \usepackage[table,xcdraw]{xcolor}
+\usepackage[pdftex]{graphicx}
+\usepackage[english]{babel}
+\usepackage{geometry} 
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{movie15}
+
+\usepackage{fancyhdr} 
+\usepackage{listings}
+\definecolor{light-gray}{gray}{0.95}
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+
+\usepackage[hyperfootnotes=false]{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	colorlinks=false,
+	urlbordercolor=white,
+	citebordercolor=black,
+	linkbordercolor = red
+}
+\title{
+		%\vspace{-1in} 	
+		\usefont{OT1}{bch}{b}{n}
+		\normalfont \normalsize \textsc{University of Illinois At Chicago\\CS521 - Statistical Natural Language Processing} \\ [25pt]
+		\horrule{2pt} \\[0.4cm]
+		\huge Prediction of User Appreciation of Yelp's Businesses Based on Text Reviews Hidden Features \\
+		\horrule{2pt} \\[0.3cm]
+}
+\author{
+		\normalfont 								\large
+         MS.Umberto Di Fabrizio, MS.Vittorio Selo\\		\normalsize
+        \today \\[0.5cm]
+}
+\date{}
+
+\geometry{margin=1in}
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+	This work aims to predict the vote (i.e.stars) that an user gives to a business on Yelp. Each user is modeled by a set of his most important words, which are extracted from his reviews and his \textit{tastes} are used to predict how much he will like a business. The contribution given by this work are: 1) A new framework is build to profile the users' tastes based only on the text in his reviews 2)The user profiling algorithm is used to predict the likelihood that the user likes a business. The method reaches 52\% of accuracy revealing the effectiveness of the approach and encourages further investigation on this area, in particular combining this approach with classical high level features.
+\end{abstract}
+\section{INTRODUCTION}
+Nowadays with the growth of websites that offer user-generated content (e.g. Yelp, IMDb, TripAdvisor) there is an increasing need, for companies, to extract the tastes of the users in order to make unique the user experience.\\
+For this reason, recently, there have been a lot of researches in this area aimed to increase the effectiveness of the contents provided to the user (e.g. Netflix competition\cite{netflix}, Amazon, Yelp\cite{altroYelp}).
+The traditional approach is based on a system that tries to predict the rating that a user would give to an item, this type of engines are called recommendation systems and have gained popularity in the recent years.\\
+Generally to achieve this outcome the system is trained using high-level features, for instance in a movie platform those features would be: the rating of the film, the genre, the actors and so on.\\
+Those characteristics are easily obtained from the database and are extensively used.\\
+Our aim is to extract \textit{hidden-features} of an user in order to understand their personal tastes and extract this information only by the text reviews.
+We call \textit{hidden-features} those personal tastes of an user which can even be unconscious for the user himself. 
+For example suppose a user writes reviews of mexican restaurants, why is one restaurant better than another although the food is good in both? Usually, people pay attention to details such as lights, atmosphere, the type of customers and so on, and sometimes without even being aware of their pet peeves.\\
+The issue is \underline{how} to find out, in an automatic way, those tastes that rule people feelings about a place (or an item) and \underline{which} source to use.\\
+The idea to address the user profiling by exploiting the text reviews has been used also by \cite{rev}, anyway the usual approach is to use LDA to extract topics and then use a similarity measure to evaluate the distance between items. Our approach tries to dig deeper in the user profiling, with the purpose to find those unique characteristics of the user and to suggest a business that he will surely like. To follow this idea we decided not to use LDA but to extract frequent words in a  user reviews and use them as indicators for user tastes.\\
+To extract the \textit{hidden-features} we will mine the reviews of an user in order to collect the most common topics (furniture, lights, etc.) and  understand what he really observes to judge a business (e.g. restaurant, pub, hotel).
+The hypothesis is that if an user always talks about certain topics then he cares a lot about that theme and this can guide the recommendation system.\\
+Once the user hidden features are extracted we use them to train an ensemble of classifiers (SVM, Naive Bayes, Linear Regression) that learn how to predict the starts vote by those features.\\
+We develop two methods: the first one is composed by one classifier that predicts one of the 9 possible classes (i.e. \{1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5\}) the second method is composed by three classifier which independently predict three subsets of the classes (i.e. \{1, 1.5 ,2\},\{2.5 ,3 ,3.5\},\{4, 4.5, 5\}) and then trains a Naive Bays classifier on the predictions of those three preceding classifiers.\\
+The approach developed has the strength that it does not make any assumption on the type of reviews, user or platform, nor it make use of any specific domain-knowledge, this makes the framework highly flexible and ready to be used across different platform with no changes.
+
+\section{DATA}
+We have used the Yelp dataset\cite{yelp} which is right now freely available because of the Yelp challenge that is currently ongoing.\\
+The dataset is composed by 1.6M reviews and 500K tips by 366K users for 61K businesses and spans across several cities( Edinburgh, Karlsruhe
+, Montreal, Waterloo, Pittsburgh, Charlotte, Urbana-Champaign, Phoenix, Las Vegas, Madison).\\
+ Because of the dimensions of the dataset and the computational power we have access to, we decided to limit our investigation to businesses in the area of Edinburgh(23780 reviews, 3150 users,4576 businesses). Anyway this work can be easily generalized to the all dataset or virtually to any dataset with the same info.\\
+ The format of the dataset is shown in fig ~\ref{review}.
+ \begin{figure}[thpb]
+ 	%\centering
+ 	\includegraphics[scale=0.75]{img/review.png}
+ 	\caption{Yelp's Dataset review format.}
+ 	\label{review}
+ \end{figure}
+
+\section{PREPROCESSING}
+The reviews of Edinburgh businesses are tokenized using the tweeter tokenizer (keeps smilies ':)'), then we use the nltk package for python trained on the  Penn Tree Bank dataset for the POS-tagging.\\
+For our first approach we scan each user's reviews, we remove stop-words and detect the nouns that he uses finally for each noun we collect three features.
+Let M be the set of all users, R the set of all reviews.
+Given user m $\in$ M let $r_m$ be the set of all reviews of user m then define $X_m$ as the set of all nouns of the user m.
+Let $n_{xmz}$ be the number of times that the word x belonging to $X_m$ appear in review z $\in$ $r_m.$
+Let $s_{mz}$ be the rank that user m gave to review z.\\
+Now we can define:
+\begin{itemize}
+	\item \textbf{Frequency}: frequency of that noun compared to the other nouns used\\
+	i.e. how much the user talks about X?
+	\[ f(x,m)= \frac{\sum_{i \in r_m}n_{xmi}}{\sum_{i \in r_m}\sum_{k \in X_m} n_{kmi}} \]
+	\item \textbf{Regularity}: how constantly is that noun used in the reviews\\
+	i.e. does the user talks about X in most of the reviews or not?
+	\[ r(x,m)= \frac{\sum_{i \in r_m}
+		n_{xmi}  \frac{1}{\sum_{k \in X_m}n_{kmi}}}	
+	{|r_m|} \]
+	\item \textbf{Relevance}: how influent is the noun to predict the rank?\\
+	i.e. is X important to the final business score?
+	\[ i(x,m)= \frac{\sum_{i \in r_m}
+		n_{xmi}  \frac{s_{mi}}{\sum_{k \in X_m}n_{kmi}}}	
+	{|r_m|} \]
+\end{itemize}
+ As shown in the formulas above all the scores are normalized, in this way we avoid any biasing problem for the classifier.\\
+
+Once we have those 3 features for each noun of a user we select the top 30 based on frequency and we intersect them with the top 30 based on regularity, this is because we want features that are frequent AND regular, finally we compute the union between those features and the top 30 based on relevance, this is because the influence of a feature to the rank is fundamental by itself. 
+ 
+We run the same algorithm to collect noun and their features for the businesses, scanning all the reviews of a business.
+
+In the end for each user we have his\textit{ best nouns} with their relative 3 hidden-features and for each business we have its nouns with their 3 hidden-features. For each best noun of a user we look in the business best nouns to check if there is a a match, in this case the business values for that word are collected otherwise a default [0,0,0] is assigned.
+In the end we have a vector:\\
+$[$ User best nouns $]  [$ Business word in common with user $]$\\
+for each user-business couple.
+In the end the length of the features vector is 2 * $|\text{best user noun}|$, so the inputs to the classifier are between $(30*3)*2=180$ and $(90*3)*2=540$.\\\\
+For our second approach we identified three subset based on the users' review stars [1-2], [3], [4,5]. For each subset we used two features: frequency and regularity and we ranked the features accordingly to the score:\[ S=log(frequency)+log(regularity) \]
+This measure takes into account both features and avoid underflow.
+We extracted the 100 most important nouns (or less if there were not enough) for each of those subsets.\\
+As in the first approach we applied the same algorithm to the businesses and then we extracted the business nouns in common with the user. The input to the classifier was again a vector of features combining user and business.\\
+
+\section{EXPERIMENTS SETUP}
+For our first method we selected all the user with more than 20,25,50,100 reviews and compared results. The random baseline is theoretically 1/9 = 11.1\% but in our dataset there are not half stars reviews so the classes to predict are only 5 (i.e.\{1,2,3,4,5\}) which raises the random baseline to 20\%.  The majority class baseline (we always predict the majority class) is 44.9\% which is really high.\\
+ Fig ~\ref{histStars} reveals how skewed is the curve of rankings on Yelp, in fact the number of 4 and 5 stars by them selfs are 69.2\% of the all dataset.
+ \begin{figure}[thpb]
+ 	\centering
+ 	\includegraphics[scale=0.4]{img/starsFrequency.png}
+ 	\caption{Distribution of stars of Yelp Edinburgh dataset.}
+ 	\label{histStars}
+ \end{figure}
+We divided the test between train(80\%), validation set (10\%) and test (10\%).
+For each user we trained an ensemble of classifiers.\\
+The validation set has been used in a variation of the algorithm to choose the best classifier for each user among Naive Bayes, Random forest, SVM and Linear Regression.\\\\
+In the second approach we selected users with more than 50 reviews and trained three classifier as follows (on the right the majority class baseline):
+\begin{enumerate}
+	\item 1, 2, Other - 91.7\%
+	\item 3, Other - 76.8\%
+	\item 4, 5, Other - 46.3\%
+\end{enumerate}
+This is motivated by the fact that we need to discriminate very well between 4 and 5,and to avoid to bias the classifier towards the majority class.\\
+Again it appears that the first classifier has an high accuracy, anyway it mostly predict the 'Other' class because of the unbalanced dataset.\\
+\section{RESULTS}
+The results for the first approach shows that 50 reviews are enough to profile an user, as presented in Table ~\ref{tab}, this reduces the number of user selected to 72.\\
+\begin{table}[]
+	\centering
+	\caption{Accuracy based on number of reviews per user}
+	\label{tab}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		MaxReviews & 20    & 25    & 50    & 75    \\ \hline
+		Accuracy   & 0.445 & 0.446 & 0.455 & 0.445 \\ \hline
+	\end{tabular}
+\end{table}
+For the second method we achieved a significant improvement.
+Fig. ~\ref{class} shows the comparison of each class with respect to its baseline; the approach cannot improve the accuracy of the class [1-2] but it outperform the baseline for the classes [3] and [4-5], especially the accuracy improves more than 12\% for class [4-5].\\
+Combining the three prediction with a Naive Bayes model we achieve an overall accuracy of 52\% outperforming by more than 6\% both the baseline and the first method.
+\begin{table}[]
+	\centering
+	\caption{Accuracy per class}
+	\label{class}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		Class      & {[}1-2{]} & {[}3{]} & {[}4-5{]} \\ \hline
+		Baseline   & 91.7\%    & 76.8\%  & 46.3\%    \\ \hline
+		Our method & 91.7\%    & 79.5\%  & 58.7\%    \\ \hline
+	\end{tabular}
+\end{table}
+\subsection{Error Analysis}
+When dealing with recommendation system it is important to understand how much does the system fails when it does not predict the right class.\\
+In the experiments we found out that the baseline majority class has an average error of -0.15, which means that it usually overestimate its prediction, moreover this is by itself a very low error.\\
+Our first model has an average error of -0.10 which means that it still overestimates the stars but with less bias.\\
+Finally our second model has an average error of 0.008 which represent the fact that the model is not consistently wrong on any direction and the error is unpredictable which is highly advisable for predictors, infact it means that there is not additional information that can be extracted from the data.
+\section{CONCLUSION}
+The work has presented two methods to profile the users' tastes from the text reviews. The comparison with the baseline shows that the second one increases the accuracy up to 52\%.\\
+This demonstrates that it is possible to extract user related information only from the text. The approach is very flexible and can be adopted to any web platform because it does not depend on any domain-specific knowledge.\\
+The limitation of our approach is mainly in the fact that the dataset is very biased towards higher scores. For this reason we would like to extend our approach and try to consider a more balanced dataset both by applying stratified sampling or by adopting a different dataset which may be very useful to compare the performances.\\
+We would also like to extend the noun extraction by extending each noun with its synonyms and/or hypernym so that the match between user nouns and business nouns can be increased.\\
+Finally,the framework that we developed opens the way to several extensions, for instance the sentiment linked to a certain noun can be extracted so that the feeling towards the topic can be added to the features.\\
+
+
+\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section*{APPENDIX}
+
+%Appendixes should appear before the acknowledgment.
+
+%\section*{ACKNOWLEDGMENT}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\twocolumn
+\begin{thebibliography}{99}
+
+\bibitem{yelp}\href{www.yelp.com/dataset_challenge}{www.yelp.com/dataset\_challenge}
+\bibitem{netflix}\href{www.netflixprize.com/index}{www.netflixprize.com/index}
+\bibitem{sim}\href{http://www.aclweb.org/anthology/E14-4#page=42}{Measuring the Similarity between Automatically Generated Topics,2014,Aletras at al.}
+\bibitem{rev}Content Profiling from Text Reviews,Christophe Dupuy et al., 2014
+\bibitem{altroYelp}Hybrid Recommender System for Prediction of the Yelp Users Preferences,Vladimir Nikulin, 2014
+\end{thebibliography}
+
+
+
+
+\end{document}
