@@ -1,68 +1,77 @@
-import os
-from os.path import join, isfile
-import pandas
-import numpy
-from collections import defaultdict
-from sklearn import metrics
-from errorAnalysis import *
+def baseline():
+    import os
+    from os.path import join, isfile
+    import pandas
+    import numpy
+    from collections import defaultdict
+    from sklearn import metrics
+    from errorAnalysis import meanError,setError
 
 
-myPath = 'trainAll/'
-listUsers = [f for f in os.listdir(str(myPath)) if isfile(join(myPath, f))]
-#listUsers.remove('.DS_Store')
+    myPath = 'trainAll/'
+    listUsers = [f for f in os.listdir(str(myPath)) if isfile(join(myPath, f))]
+    #listUsers.remove('.DS_Store')
 
-dictResult = defaultdict(float)
+    dictResult = defaultdict(float)
 
-averageError = float()
-errorSet = int()
-for user in listUsers:
-    dictCount = defaultdict(int)
-    majority = float()
-    trainRank = numpy.array(pandas.read_csv('trainAll/stars/'+user, header=None))
-    trainRank = [val for sublist in trainRank for val in sublist]
-    trainRank = list(map(lambda x: int(x*5), trainRank))
+    averageError = float()
+    errorSet = int()
 
-    validationRank = numpy.array(pandas.read_csv('validationAll/stars/'+user, header=None))
-    validationRank = [val for sublist in validationRank for val in sublist]
-    validationRank = list(map(lambda x: int(x*5), validationRank))
+    listOfPredictions = []
 
-    testRank = numpy.array(pandas.read_csv('testAll/stars/'+user, header=None))
-    testRank = [val for sublist in testRank for val in sublist]
-    testRank = list(map(lambda x: int(x*5), testRank))
+    for user in listUsers:
+        dictCount = defaultdict(int)
+        majority = float()
+        trainRank = numpy.array(pandas.read_csv('trainAll/stars/'+user, header=None))
+        trainRank = [val for sublist in trainRank for val in sublist]
+        trainRank = list(map(lambda x: int(x*5), trainRank))
 
-    for x in trainRank:
-        dictCount[x] += 1
-    for x in validationRank:
-        dictCount[x] += 1
+        validationRank = numpy.array(pandas.read_csv('validationAll/stars/'+user, header=None))
+        validationRank = [val for sublist in validationRank for val in sublist]
+        validationRank = list(map(lambda x: int(x*5), validationRank))
 
-    for x in dictCount.keys():
-        if(dictCount[x] == max(dictCount.values())):
-            majority = x
-            break
+        testRank = numpy.array(pandas.read_csv('testAll/stars/'+user, header=None))
+        testRank = [val for sublist in testRank for val in sublist]
+        testRank = list(map(lambda x: int(x*5), testRank))
 
-    prediction = list()
-    for x in range(len(testRank)):
-        prediction.append(majority)
+        for x in trainRank:
+            dictCount[x] += 1
+        for x in validationRank:
+            dictCount[x] += 1
 
-    dictResult[user] = metrics.accuracy_score(testRank, prediction)
+        for x in dictCount.keys():
+            if(dictCount[x] == max(dictCount.values())):
+                majority = x
+                break
 
-    averageError += meanError(prediction,testRank)
-    errorSet += setError(prediction,testRank)
+        prediction = list()
+        for x in range(len(testRank)):
+            prediction.append(majority)
 
-accuracy = float()
-for key in dictResult.keys():
-    accuracy += dictResult[key]
+        dictResult[user] = metrics.accuracy_score(testRank, prediction)
 
-accuracy /= len(listUsers)
-
-print(accuracy)
-print('=============ERROR=========')
-print(averageError/len(listUsers)) #=> -0.15346161033753716
-print(errorSet) #=> 736
+        averageError += meanError(prediction,testRank)
+        errorSet += setError(prediction,testRank)
 
 
-# trainAll, minReview 20: 0.441929922377 -> test same
-# trainAll, minReview 50: 0.449429999815 -> test 0.454907309474
+        #collecet list of prediction to execute later the t-test
+        listOfPredictions.append(prediction)
+
+    accuracy = float()
+    for key in dictResult.keys():
+        accuracy += dictResult[key]
+
+    accuracy /= len(listUsers)
+
+    print(accuracy)
+    print('=============ERROR=========')
+    print(averageError/len(listUsers)) #=> -0.15346161033753716
+    print(errorSet) #=> 736
+
+    return listOfPredictions
+
+    # trainAll, minReview 20: 0.441929922377 -> test same
+    # trainAll, minReview 50: 0.449429999815 -> test 0.454907309474
 
 
 

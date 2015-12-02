@@ -219,20 +219,11 @@ def runTest(rank):
     #========PREDICTION ON TRAIN TO CREATE DATA FOR THE SECOND CLASSIFIER====#
     for user in dictPredictor.keys():
         dataTest = numpy.array(pandas.read_csv('trainPerRank/'+user, header=None))
-        #testRank = list(map(lambda x:x[0],numpy.array(pandas.read_csv('trainPerRank/'+rank+'/stars/'+user, header=None))))
-
-        #testRank = [val for sublist in testRank for val in sublist]
-        #testRank = list(map(lambda x: int(x+1), testRank))
 
         predicted = dictPredictor[user][0].predict(dataTest)
         dfPrediction = pn.DataFrame(pn.Series(predicted))
-       #dfTarget = pn.DataFrame(pn.Series(testRank))
 
-        #df = pn.concat([dfPrediction, dfTarget], axis=1)
         dfPrediction.to_csv('trainPerRank/'+rank+'/prediction/'+user, header=False, index_label=False, index=False)
-
-        #print(df)
-        #dictRealResult[user] = metrics.accuracy_score(testRank, predicted)
 
     #=========== PREDICTION ON REAL DATASET =========#
 
@@ -240,18 +231,12 @@ def runTest(rank):
         dataTest = numpy.array(pandas.read_csv('testPerRank/'+user, header=None))
         testRank = list(map(lambda x:x[0],numpy.array(pandas.read_csv('testPerRank/'+rank+'/stars/'+user, header=None))))
 
-        #testRank = [val for sublist in testRank for val in sublist]
-        #testRank = list(map(lambda x: int(x+1), testRank))
-
         predicted = dictPredictor[user][0].predict(dataTest)
         dfPrediction = pn.DataFrame(pn.Series(predicted))
-        #dfTarget = pn.DataFrame(pn.Series(testRank))
-
-        #df = pn.concat([dfPrediction, dfTarget], axis=1)
         dfPrediction.to_csv('testPerRank/'+rank+'/prediction/'+user, header=False, index_label=False, index=False)
 
-        #print(df)
         dictRealResult[user] = metrics.accuracy_score(testRank, predicted)
+
 
     accuracy = float()
     for key in dictMAXENTTest.keys():
@@ -270,6 +255,8 @@ def runTest(rank):
     accuracy /= len(listUsers)
     print(accuracy)
     print('ENSEMBLE')
+
+
 
 runTest('1-2')
 runTest('3')

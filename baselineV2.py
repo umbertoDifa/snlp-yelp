@@ -17,6 +17,9 @@ def baseline(rank):
 
     averageError = float()
     errorSet = int()
+
+
+
     for user in listUsers:
         dictCount = defaultdict(int)
         majority = float()
@@ -50,6 +53,7 @@ def baseline(rank):
 
         averageError += meanError(prediction,testRank)
         errorSet += setError(prediction,testRank)
+
 
     accuracy = float()
     for key in dictResult.keys():

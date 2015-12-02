@@ -31,7 +31,17 @@
 \usepackage{movie15}
 \usepackage{fancyhdr} 
 \usepackage{listings}
-\usepackage[hyperfootnotes=false]{hyperref}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+%	colorlinks,
+	citecolor=white,
+	filecolor=white,
+	linkcolor=white,
+	colorlinks=false,
+	urlbordercolor=white,
+	citebordercolor=white,
+	linkbordercolor = red
+}
 %\setlength\titlebox{5cm}
 
 % You can expand the titlebox if you need extra space
@@ -60,20 +70,22 @@
 \section{Introduction}
 
 Nowadays with the growth of websites that offer user-generated content (e.g. Yelp, IMDb, TripAdvisor) there is an increasing need, for companies, to extract the tastes of the users in order to make unique the user experience.\\
-For this reason, recently, there have been a lot of researches in this area aimed to increase the effectiveness of the contents provided to the user (e.g. Netflix competition\cite{netflix}, Amazon, Yelp\cite{altroYelp}).
+For this reason, recently, there have been a lot of researches in this area aimed to increase the effectiveness of the contents provided to the user (e.g. Netflix competition\cite{Netflix}, Amazon, Yelp\cite{Nikulin}).
 The traditional approach is based on a system that tries to predict the rating that a user would give to an item, this type of engines are called recommendation systems and have gained popularity in the recent years.\\
 Generally to achieve this outcome the system is trained using high-level features, for instance in a movie platform those features would be: the rating of the film, the genre, the actors and so on.\\
 Those characteristics are easily obtained from the database and are extensively used.\\
 Our aim is to extract \textit{hidden-features} of an user in order to understand their personal tastes and extract this information only by the text reviews.
 We call \textit{hidden-features} those personal tastes of an user which can even be unconscious for the user himself. 
-For example suppose a user writes reviews of mexican restaurants, why is one restaurant better than another although the food is good in both? Usually, people pay attention to details such as lights, atmosphere, the type of customers and so on, and sometimes without even being aware of their pet peeves.\\
+For example suppose a user writes reviews of Mexican restaurants, why is one restaurant better than another although the food is good in both? Usually, people pay attention to details such as lights, atmosphere, the type of customers and so on, and sometimes without even being aware of their pet peeves.\\
 The issue is \underline{how} to find out, in an automatic way, those tastes that rule people feelings about a place (or an item) and \underline{which} source to use.\\
-The idea to address the user profiling by exploiting the text reviews has been used also by \cite{rev}, anyway the usual approach is to use LDA to extract topics and then use a similarity measure to evaluate the distance between items. Our approach tries to dig deeper in the user profiling, with the purpose to find those unique characteristics of the user and to suggest a business that he will surely like. To follow this idea we decided not to use LDA but to extract frequent words in a  user reviews and use them as indicators for user tastes.\\
+The idea to address the user profiling by exploiting the text reviews has been used also by \cite{Dupuy}, anyway the common approach is to use LDA to extract topics and then use a similarity measure to evaluate the distance between items. Our approach tries to dig deeper in the user profiling, with the purpose to find those unique characteristics of the user and to suggest a business that he will surely like. To follow this idea we decided not to use LDA but to extract frequent words in a  user reviews and use them as indicators for user tastes.\\
 To extract the \textit{hidden-features} we will mine the reviews of an user in order to collect the most common topics (furniture, lights, etc.) and  understand what he really observes to judge a business (e.g. restaurant, pub, hotel).
 The hypothesis is that if an user always talks about certain topics then he cares a lot about that theme and this can guide the recommendation system.\\
 Once the user hidden features are extracted we use them to train an ensemble of classifiers (SVM, Naive Bayes, Linear Regression) that learn how to predict the starts vote by those features.\\
 We develop two methods: the first one is composed by one classifier that predicts one of the 9 possible classes (i.e. \{1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5\}) the second method is composed by three classifier which independently predict three subsets of the classes (i.e. \{1, 1.5 ,2\},\{2.5 ,3 ,3.5\},\{4, 4.5, 5\}) and then trains a Naive Bays classifier on the predictions of those three preceding classifiers.\\
 The approach developed has the strength that it does not make any assumption on the type of reviews, user or platform, nor it make use of any specific domain-knowledge, this makes the framework highly flexible and ready to be used across different platform with no changes.
+
+\section{RELATED WORK}
 
 \section{DATA}
 We have used the Yelp dataset\cite{yelp} which is right now freely available because of the Yelp challenge that is currently ongoing.\\
@@ -87,7 +99,8 @@ The format of the dataset is shown in fig ~\ref{review}.
 	\caption{Yelp's Dataset review format.}
 	\label{review}
 \end{figure}
-\section{PREPROCESSING}
+\section{METHODS}
+\section{PREPROCESSING deleteme}
 The reviews of Edinburgh businesses are tokenized using the tweeter tokenizer (keeps smilies ':)'), then we use the nltk package for python trained on the  Penn Tree Bank dataset for the POS-tagging.\\
 For our first approach we scan each user's reviews, we remove stop-words and detect the nouns that he uses finally for each noun we collect three features.
 Let M be the set of all users, R the set of all reviews.
@@ -117,13 +130,13 @@ In the end for each user we have his\textit{ best nouns} with their relative 3 h
 In the end we have a vector:\\
 $[$ User best nouns $]  [$ Business word in common with user $]$\\
 for each user-business couple.
-In the end the length of the features vector is $2 * |\text{best user noun}|$, so the inputs to the classifier are between $(30*3)*2=180$ and $(90*3)*2=540$.\\\\
+In the end the length of the features vector is $2 * |\text{best user noun}|$, so the inputs to the classifier are between $(30*3)*2=180$ and $(60*3)*2=360$.\\\\
 For our second approach we identified three subset based on the users' review stars [1-2], [3], [4,5]. For each subset we used two features: frequency and regularity and we ranked the features accordingly to the score:\[ S=log(frequency)+log(regularity) \]
 This measure takes into account both features and avoid underflow.
 We extracted the 100 most important nouns (or less if there were not enough) for each of those subsets.\\
 As in the first approach we applied the same algorithm to the businesses and then we extracted the business nouns in common with the user. The input to the classifier was again a vector of features combining user and business.\\
 
-\section{EXPERIMENTS SETUP}
+\section{EXPERIMENTS SETUP deleteme}
 For our first method we selected all the user with more than 20,25,50,100 reviews and compared results. The random baseline is theoretically 1/9 = 11.1\% but in our dataset there are not half stars reviews so the classes to predict are only 5 (i.e.\{1,2,3,4,5\}) which raises the random baseline to 20\%.  The majority class baseline (we always predict the majority class) is 44.9\% which is really high.\\
 Fig ~\ref{histStars} reveals how skewed is the curve of rankings on Yelp, in fact the number of 4 and 5 stars by them selfs are 69.2\% of the all dataset.
 \begin{figure}[thpb]
@@ -182,6 +195,8 @@ We would also like to extend the noun extraction by extending each noun with its
 Finally,the framework that we developed opens the way to several extensions, for instance the sentiment linked to a certain noun can be extracted so that the feeling towards the topic can be added to the features.\\
 
 
+
+
 \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
 % on the last page of the document manually. It shortens
 % the textheight of the last page by a suitable amount.
@@ -198,8 +213,9 @@ Finally,the framework that we developed opens the way to several extensions, for
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section*{APPENDIX}
-
+\newpage
+\section*{APPENDIX}
+how we worked
 %Appendixes should appear before the acknowledgment.
 
 %\section*{ACKNOWLEDGMENT}
@@ -210,26 +226,31 @@ Finally,the framework that we developed opens the way to several extensions, for
 \begin{thebibliography}{}
 	
 	
-	\bibitem[\protect\citename{Yelp}]{}
-	Yelp\_Dataset
+\bibitem[\protect\citename{Yelp} 2015]{yelp}
+	Yelp Dataset.
+\newblock 2015
 	\newblock \href{www.yelp.com/dataset_challenge}{www.yelp.com/dataset\_challenge}
 	
-	\bibitem[\protect\citename{Netflix}]{}
-	Netflix\_Challenge
-	\newblock \href{www.netflixprize.com/index}{www.netflixprize.com/index}
+\bibitem[\protect\citename{Netflix} 2009]{Netflix}
+Netflix Challenge.
+\newblock 2009.
+\newblock \href{www.netflixprize.com/index}{www.netflixprize.com/index}
 	
-	\bibitem[\protect\citename{sim}]{Aletras}
+\bibitem[\protect\citename{Aletras} 2014]{Aletras} %sim
 Aletras et al.
-	\newblock \href{http://www.aclweb.org/anthology/E14-4#page=42}{Measuring the Similarity between Automatically Generated Topics,2014,Aletras at al.}
-	
-		\bibitem[\protect\citename{altroYelp}]{Nikulin}
+\newblock 2014.
+\newblock \textit{Measuring the Similarity between Automatically Generated Topics}.
 
-		\newblock Hybrid Recommender System for Prediction of the Yelp Users Preferences,Vladimir Nikulin, 2014
+\bibitem[\protect\citename{Nikulin} 2014]{Nikulin} %altroYelp
+Vladimir Nikulin.
+\newblock 2014.
+\newblock \textit{Hybrid Recommender System for Prediction of the Yelp Users}.
 
-\bibitem[\protect\citename{rev}]{Dupuy}
+\bibitem[\protect\citename{Dupuy} 2014]{Dupuy} %rev
+Christophe Dupuy et al.
+\newblock 2014.
+\newblock \textit{Content Profiling from Text Reviews}.
 
-\newblock Content Profiling from Text Reviews,
-\newblock Christophe Dupuy et al., 2014
 
 
 
