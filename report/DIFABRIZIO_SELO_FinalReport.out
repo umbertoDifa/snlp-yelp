@@ -2,8 +2,10 @@
 \BOOKMARK [1][-]{section.2}{RELATED WORK}{}% 2
 \BOOKMARK [1][-]{section.3}{DATA}{}% 3
 \BOOKMARK [1][-]{section.4}{METHODS}{}% 4
-\BOOKMARK [1][-]{section.5}{PREPROCESSING deleteme}{}% 5
-\BOOKMARK [1][-]{section.6}{EXPERIMENTS SETUP deleteme}{}% 6
-\BOOKMARK [1][-]{section.7}{RESULTS}{}% 7
-\BOOKMARK [2][-]{subsection.7.1}{Error Analysis}{section.7}% 8
-\BOOKMARK [1][-]{section.8}{CONCLUSION}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{PREPROCESSING}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{FIRST METHOD}{section.4}% 6
+\BOOKMARK [2][-]{subsection.4.3}{SECOND METHOD}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.4}{EXPERIMENTS SETUP}{section.4}% 8
+\BOOKMARK [1][-]{section.5}{RESULTS}{}% 9
+\BOOKMARK [2][-]{subsection.5.1}{Error Analysis}{section.5}% 10
+\BOOKMARK [1][-]{section.6}{CONCLUSION}{}% 11
