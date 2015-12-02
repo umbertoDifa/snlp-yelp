@@ -33,13 +33,17 @@ def runMethod2():
                  [0, 0, 0,0,0]])
 
     listOfPredictions = []
+    listOfTrainData=[]
+    listOfTrainTarget = []
+    listOfTestData = []
+    listOfTestTarget = []
+
 
     for user in listUsers:
          #======READING TRAIN SET========
         dataTrain_12 = numpy.array(pandas.read_csv('trainPerRank/1-2/prediction/'+user, header=None))
         trainRank = list(map(lambda x:x[1],numpy.array(pandas.read_csv('trainPerRank/1-2/stars/'+user, header=None))))
         #Need flat list
-        #trainRank = [val for sublist in trainRank for val in sublist]
         dataTrain_12 = [val for sublist in dataTrain_12 for val in sublist]
 
 
@@ -58,6 +62,9 @@ def runMethod2():
 
         dataTrain = numpy.array(dfData)
 
+        #===========SAVE ENSEMBLED DATATRAIN (for neural))================
+        listOfTrainData.append(dataTrain)
+        listOfTrainTarget.append(trainRank)
 
 
         #============READING TEST SET ==========
@@ -77,6 +84,10 @@ def runMethod2():
         dataTest = numpy.array(dfDataTest)
 
         testRank = list(map(lambda x:x[1],numpy.array(pandas.read_csv('testPerRank/1-2/stars/'+user, header=None))))
+
+        #=========SAVE TESTSET (neural)=========
+        listOfTestData.append(dataTest)
+        listOfTestTarget.append(testRank)
 
         # gnb = GaussianNB()
         # gnb.fit(dataTrain, trainRank)
@@ -168,6 +179,54 @@ def runMethod2():
     #  [ 13  26 139  88  35]
     #  [ 23  34  60 360 100]
     #  [  6  30  22 112 155]]
+
+    listOfTrainData = [val for sublist in listOfTrainData for val in sublist]
+    listOfTestData = [val for sublist in listOfTestData for val in sublist]
+    listOfTrainTarget = [val for sublist in listOfTrainTarget for val in sublist]
+    listOfTestTarget = [val for sublist in listOfTestTarget for val in sublist]
+
+    dfTrain = pn.DataFrame(listOfTrainData)
+    dfTrainRank =pn.DataFrame()
+    for val in listOfTrainTarget:
+        if val==1:
+            dfTrainRank=dfTrainRank.append(pn.Series([0,0,0,0,1]),ignore_index=True)
+        elif val ==2:
+            dfTrainRank=dfTrainRank.append(pn.Series([0,0,0,1,0]),ignore_index=True)
+        elif val ==3:
+            dfTrainRank=dfTrainRank.append(pn.Series([0,0,1,0,0]),ignore_index=True)
+        elif val ==4:
+            dfTrainRank=dfTrainRank.append(pn.Series([0,1,0,0,0]),ignore_index=True)
+        elif val ==5:
+            dfTrainRank=dfTrainRank.append(pn.Series([1,0,0,0,0]),ignore_index=True)
+
+    #create folder if necessary
+    if not os.path.exists('trainForNeural/'):
+        os.makedirs('trainForNeural/')
+
+    dfTrain.to_csv('trainForNeural/data.csv', header=False, index_label=False, index=False)
+    dfTrainRank.to_csv('trainForNeural/target.csv', header=False, index_label=False, index=False)
+
+
+    dfTest = pn.DataFrame(listOfTestData)
+    dfTestRank =pn.DataFrame()
+    for val in listOfTestTarget:
+        if val==1:
+            dfTestRank=dfTestRank.append(pn.Series([0,0,0,0,1]),ignore_index=True)
+        elif val ==2:
+            dfTestRank=dfTestRank.append(pn.Series([0,0,0,1,0]),ignore_index=True)
+        elif val ==3:
+            dfTestRank=dfTestRank.append(pn.Series([0,0,1,0,0]),ignore_index=True)
+        elif val ==4:
+            dfTestRank=dfTestRank.append(pn.Series([0,1,0,0,0]),ignore_index=True)
+        elif val ==5:
+            dfTestRank=dfTestRank.append(pn.Series([1,0,0,0,0]),ignore_index=True)
+
+    #create folder if necessary
+    if not os.path.exists('testForNeural/'):
+        os.makedirs('testForNeural/')
+
+    dfTest.to_csv('testForNeural/data.csv', header=False, index_label=False, index=False)
+    dfTestRank.to_csv('testForNeural/target.csv', header=False, index_label=False, index=False)
 
     return listOfPredictions
 

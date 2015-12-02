@@ -2,16 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0157740-5fcf-4e3a-bfa5-d899603182c1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculateTtest.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.pdf" afterPath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.pdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.synctex.gz" afterPath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.synctex.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.aux" afterPath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.aux" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.out" afterPath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.out" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.tex" afterPath="$PROJECT_DIR$/report/DIFABRIZIO_SELO_FinalReport.tex" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SVMScript.py" afterPath="$PROJECT_DIR$/SVMScript.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SVMScriptV2.py" afterPath="$PROJECT_DIR$/SVMScriptV2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/baseline.py" afterPath="$PROJECT_DIR$/baseline.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/baselineV2.py" afterPath="$PROJECT_DIR$/baselineV2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/unionOfClassifiers.py" afterPath="$PROJECT_DIR$/unionOfClassifiers.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -31,7 +21,7 @@
     <SUITE FILE_PATH="coverage/projectSNLP$ensemblePerUserV2.coverage" NAME="ensemblePerUserV2 Coverage Results" MODIFIED="1448670301181" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/projectSNLP$baseline.coverage" NAME="baseline Coverage Results" MODIFIED="1448814569495" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/projectSNLP$ensemblePerUser.coverage" NAME="ensemblePerUser Coverage Results" MODIFIED="1448823112167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/projectSNLP$unionOfClassifiers.coverage" NAME="unionOfClassifiers Coverage Results" MODIFIED="1449040750025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/projectSNLP$unionOfClassifiers.coverage" NAME="unionOfClassifiers Coverage Results" MODIFIED="1449050176999" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/projectSNLP$SVMScriptV2.coverage" NAME="SVMScriptV2 Coverage Results" MODIFIED="1448822405954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/projectSNLP$baselineV2.coverage" NAME="baselineV2 Coverage Results" MODIFIED="1448817198953" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/projectSNLP$utility.coverage" NAME="utility Coverage Results" MODIFIED="1447459177889" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -105,7 +95,7 @@
         <entry file="file://$PROJECT_DIR$/SVMScriptV2.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <caret line="236" column="0" selection-start-line="234" selection-start-column="7" selection-end-line="236" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -126,8 +116,8 @@
       <file leaf-file-name="unionOfClassifiers.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/unionOfClassifiers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4987715">
-              <caret line="127" column="22" selection-start-line="127" selection-start-column="22" selection-end-line="127" selection-end-column="22" />
+            <state vertical-scroll-proportion="6.2211304">
+              <caret line="213" column="33" selection-start-line="213" selection-start-column="33" selection-end-line="213" selection-end-column="33" />
               <folding>
                 <element signature="e#0#61#0" expanded="true" />
               </folding>
@@ -596,7 +586,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="1378" height="780" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2496329" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -605,7 +595,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39880952" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35267857" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35267857" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -1019,14 +1009,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SVMScriptV2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/calculateTtest.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1045,10 +1027,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/SVMScriptV2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="236" column="0" selection-start-line="234" selection-start-column="7" selection-end-line="236" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/unionOfClassifiers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4987715">
-          <caret line="127" column="22" selection-start-line="127" selection-start-column="22" selection-end-line="127" selection-end-column="22" />
+        <state vertical-scroll-proportion="6.2211304">
+          <caret line="213" column="33" selection-start-line="213" selection-start-column="33" selection-end-line="213" selection-end-column="33" />
           <folding>
             <element signature="e#0#61#0" expanded="true" />
           </folding>
