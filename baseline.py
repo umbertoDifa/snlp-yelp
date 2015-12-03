@@ -44,6 +44,7 @@ def baseline():
                 majority = x
                 break
 
+
         prediction = list()
         for x in range(len(testRank)):
             prediction.append(majority)
@@ -72,7 +73,7 @@ def baseline():
 
     # trainAll, minReview 20: 0.441929922377 -> test same
     # trainAll, minReview 50: 0.449429999815 -> test 0.454907309474
+    #prediction with the majority class of the dataset: 0.423
 
-
-
+baseline()
 
