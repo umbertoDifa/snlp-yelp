@@ -64,7 +64,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-	This work aims to predict the vote (i.e.stars) that an user gives to a business on Yelp. Each user is modeled by a set of his most important words, which are extracted from his reviews and his \textit{tastes} are used to predict how much he will like a business. The contribution given by this work are: 1) A new framework is build to profile the users' tastes based only on the text in his reviews 2)The user profiling algorithm is used to predict the likelihood that the user likes a business. The method reaches 54\% of accuracy revealing the effectiveness of the approach and encourages further investigation on this area, in particular combining this approach with classical high level features.
+	This work aims to predict the vote (i.e.stars) that an user gives to a business on Yelp. Each user is modeled by a set of his most important words, which are extracted from his reviews and his \textit{tastes} are used to predict how much he will like a business. The contribution given by this work are: 1) A new framework is build to profile the users' tastes based only on the text in his reviews 2)The user profiling algorithm is used to predict the likelihood that the user likes a business. The method reaches $\sim 54\%$ of accuracy revealing the effectiveness of the approach and encourages further investigation on this area, in particular combining this approach with classical high level features.
 \end{abstract}
 
 \section{Introduction}
@@ -72,18 +72,24 @@
 Nowadays with the growth of websites that offer user-generated content (e.g. Yelp, IMDb, TripAdvisor) there is an increasing need, for companies, to extract the tastes of the users in order to make unique the user experience.\\
 For this reason, recently, there have been a lot of researches in this area aimed to increase the effectiveness of the contents provided to the user (e.g. Netflix competition\cite{Netflix}, Amazon, Yelp\cite{Nikulin}).
 The traditional approach is based on a system that tries to predict the rating that a user would give to an item, this type of engines are called recommendation systems and have gained popularity in the recent years.\\
-Generally to achieve this outcome the system is trained using high-level features, for instance in a movie platform those features would be: the rating of the film, the genre, the actors and so on.\\
+Generally to achieve this outcome, the system is trained using high-level features, for instance in a movie platform those features would be: the rating of the film, the genre, the actors and so on.\\
 Those characteristics are easily obtained from the database and are extensively used.\\
 Our aim is to extract \textit{hidden-features} of an user in order to understand their personal tastes and extract this information only by the text reviews.
 We call \textit{hidden-features} those personal tastes of an user which can even be unconscious for the user himself. 
-For example suppose a user writes reviews of Mexican restaurants, why is one restaurant better than another although the food is good in both? Usually, people pay attention to details such as lights, atmosphere, the type of customers and so on, and sometimes without even being aware of their pet peeves.\\
+For example, suppose a user writes reviews of Mexican restaurants, why is one restaurant better than another although the food is good in both? Usually, people pay attention to details such as lights, atmosphere, the type of customers and so on, and sometimes without even being aware of their pet peeves.\\
 The issue is \underline{how} to find out, in an automatic way, those tastes that rule people feelings about a place (or an item) and \underline{which} source to use.\\
 
 To extract the \textit{hidden-features} we will mine the reviews of an user in order to collect the most common topics (furniture, lights, etc.) and  understand what he really observes to judge a business (e.g. restaurant, pub, hotel).
 The hypothesis is that if an user always talks about certain topics then he cares a lot about that theme and this can guide the recommendation system.\\
-Once the user hidden features are extracted we use them to train an ensemble of classifiers (SVM, Naive Bayes, Linear Regression) that learn how to predict the starts vote by those features.\\
+Once the user hidden features are extracted, we use them to train an ensemble of classifiers (SVM, Naive Bayes, Linear Regression) that learn how to predict the starts vote by those features.\\
 We develop two methods: the first one is composed by one classifier that predicts one of the 9 possible classes (i.e. \{1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5\}) the second method is composed by three classifier which independently predict three subsets of the classes (i.e. \{1, 1.5 ,2\},\{2.5 ,3 ,3.5\},\{4, 4.5, 5\}) and then trains a Adaptive Boosting classifier on the predictions of those three preceding classifiers to obtain the final prediction.\\
-The approach developed has the strength that it does not make any assumption on the type of reviews, user or platform, nor it make use of any specific domain-knowledge, this makes the framework highly flexible and ready to be used across different platform with no changes.
+The approach developed has the strength that it does not make any assumption on the type of reviews, user or platform, nor it make use of any specific domain-knowledge, this makes the framework highly flexible and ready to be used across different platform with no changes.\\
+In the end, summing up the contributions of this work are:
+\begin{itemize}
+\item Extraction in a fine grain way the tastes of the users through their reviews.
+\item Presentation of two novel frameworks with the aim of predict the future ranks that a user will give to unseen businesses.
+\item Validation and experiments conduct on real data taken from the websites \textit{Yelp.com}
+\end{itemize}
 
 \section{RELATED WORK}
 
@@ -116,22 +122,22 @@ The format of the dataset is shown in fig ~\ref{review}.
 \subsection{PREPROCESSING}
 The reviews of Edinburgh businesses are tokenized using the tweeter tokenizer (keeps smilies ':)'), then we use the nltk package for python trained on the  Penn Tree Bank dataset for the POS-tagging.\\
 For our first approach we scan each user's reviews, we remove stop-words and detect the nouns that he uses finally for each noun we collect three features.
-Let M be the set of all users, R the set of all reviews.
-Given user m $\in$ M let $r_m$ be the set of all reviews of user m then define $X_m$ as the set of all nouns of the user m.
-Let $n_{xmz}$ be the number of times that the word x belonging to $X_m$ appear in review z $\in$ $r_m.$
-Let $s_{mz}$ be the rank that user m gave to review z.\\
+Let $M$ be the set of all users, $R$ the set of all reviews.
+Given user $m$ $\in$ $M$ let $r_m$ be the set of all reviews of user $m$ then define $X_m$ as the set of all nouns of the user $m$.
+Let $n_{xmz}$ be the number of times that the word $x$ belonging to $X_m$ appear in review $z$ $\in$ $r_m.$
+Let $s_{mz}$ be the rank that user $m$ gave to review $z$.\\
 Now we can define:
 \begin{itemize}
 	\item \textbf{Frequency}: frequency of that noun compared to the other nouns used\\
-	i.e. how much the user talks about X?
+	i.e. how much the user talks about $X$?
 	\[ f(x,m)= \frac{\sum_{i \in r_m}n_{xmi}}{\sum_{i \in r_m}\sum_{k \in X_m} n_{kmi}} \]
 	\item \textbf{Regularity}: how constantly is that noun used in the reviews\\
-	i.e. does the user talks about X in most of the reviews or not?
+	i.e. does the user talks about $X$ in most of the reviews or not?
 	\[ r(x,m)= \frac{\sum_{i \in r_m}
 		n_{xmi}  \frac{1}{\sum_{k \in X_m}n_{kmi}}}	
 	{|r_m|} \]
 	\item \textbf{Relevance}: how influent is the noun to predict the rank?\\
-	i.e. is X important to the final business score?
+	i.e. is $X$ important to the final business score?
 	\[ i(x,m)= \frac{\sum_{i \in r_m}
 		n_{xmi}  \frac{s_{mi}}{\sum_{k \in X_m}n_{kmi}}}	
 	{|r_m|} \]
@@ -148,7 +154,7 @@ The pipeline for our first method is shown in figure ~\ref{first},
 for each user we extract nouns, adverbs and adjectives and for each of them 
  we have the 3 features. We select the top n (30) based on frequency and we intersect them with the top 30 based on regularity, this is because we want words that are frequent AND regular, finally we compute the union between those words and the top 30 based on relevance, this is because the influence of a word to the rank is fundamental by itself. 
 We run the same algorithm to collect words and their features for the businesses, scanning all the reviews of a business.
-In the end for each user we have his\textit{ best words} with their relative 3 hidden-features and for each business we have its words with their 3 hidden-features. For each best word of a user we look in the business best words to check if there is a match, in this case the business values for that word are collected otherwise a default $[0,0,0]$ is assigned.
+In the end, for each user we have his\textit{ best words} with their relative 3 hidden-features and for each business we have its words with their 3 hidden-features. For each best word of a user we look in the business best words to check if there is a match, in this case the business values for that word are collected otherwise a default $[0,0,0]$ is assigned.
 In the end we have a vector:\\
 $[$ User best nouns $]  [$ Business word in common with user $]$\\
 for each user-business couple.
@@ -166,7 +172,7 @@ The workflow for our second method in shown in figure ~\ref{second}.
 For our second approach we identified three subset based on the users' review stars [1-2], [3], [4,5]. The reason is that we need an algorithm that can distinguish classes '1' and '2' from the rest of the world as well as discriminate between class '4' and '5'. For each subset we used two features: frequency and regularity (we omit relevance because in this context is not meaningful) and we ranked the words accordingly to the score:\[ S=log(frequency)+log(regularity) \]
 This measure takes into account both features and avoids underflow.
 We extracted the 100 most important nouns (or less if there were not enough) for each of those subsets.\\
-As in the first approach we applied the same algorithm to the businesses and then we extracted the business nouns in common with the user.\\
+As in the first approach, we applied the same algorithm to the businesses and then we extracted the business nouns in common with the user.\\
 For each subset of user's review we train a classifier which is particularly good at discriminate between only a subset of classes (e.g. '3' or 'Other').//
 
 We selected users with more than 50 reviews and trained three classifiers as follows (on the right the majority class baseline):
@@ -208,7 +214,7 @@ The results for the first approach shows that 50 reviews are enough to profile a
 \end{table}
 For the second method we achieved a statistical significant improvement reaching 54\% of accuracy\footnote{*p-value$\approx$ 0}. The analysis of the second method has been further divided to understand the accuracy of each of the three classifiers:
 fig. ~\ref{class} shows the comparison of each class with respect to its baseline; the approach cannot improve the accuracy of the class [1-2] but it outperform the baseline for the classes [3] and [4-5], especially the accuracy improves more than 12\% for class [4-5].\\
-Combining the three prediction with the Adaptive Boosting model we achieve an overall accuracy of 54\% outperforming by 9\% the baseline.
+Combining the three prediction with the Adaptive Boosting model we achieve an overall accuracy of $\sim 54\%$ outperforming by $\sim 9\%$ the baseline.
 \begin{table}[]
 	\centering
 	\caption{Accuracy per class}
@@ -221,7 +227,7 @@ Combining the three prediction with the Adaptive Boosting model we achieve an ov
 	\end{tabular}
 \end{table}
 \subsection{Error Analysis}
-When dealing with recommendation system it is important to understand how much does the system fails when it does not predict the right class and how does it fail.\\
+When dealing with recommendation system, it is important to understand how much does the system fails when it does not predict the right class and how does it fail.\\
 In the experiments we found out that the baseline majority class has an average error of -0.15, which means that it usually overestimate its prediction, moreover this is by itself a very low error.\\
 Our first model has an average error of -0.10 which means that it still overestimates the stars but with less bias.\\
 Finally our second model has the lowest average error of -0.08.
@@ -245,8 +251,9 @@ From the confusion matrix we can also see the struggle of the algorithm to predi
 The work has presented two methods to profile the users' tastes from the text reviews. The comparison with the baseline shows that the second one increases the accuracy up to 54\%.\\
 This demonstrates that it is possible to extract user related information only from the text. The approach is very flexible and can be adopted to any web platform because it does not depend on any domain-specific knowledge.\\
 The limitation of our approach is mainly in the fact that the dataset is very biased towards higher scores. For this reason we would like to extend our approach and try to consider a more balanced dataset both by applying stratified sampling or by adopting a different dataset which may be very useful to compare the performances.\\
+Moreover, another limitation regards the accuracy. With this performance we cannot use our approaches in a real recommendation system. This leads us to a new objective, in future works we will integrate our system with \textit{state-of-the-art} methods in order to achieve better results, usable in a real context.\\
 We would also like to extend the noun extraction by extending each noun with its synonyms and/or hypernym so that the match between user nouns and business nouns can be increased.\\
-Finally,the framework that we developed opens the way to several extensions, for instance the sentiment linked to a certain noun can be extracted so that the feeling towards the topic can be added to the features.\\
+Finally, the framework that we developed opens the way to several extensions, for instance the sentiment linked to a certain noun can be extracted so that the feeling towards the topic can be added to the features.\\
 
 
 
